@@ -1,6 +1,7 @@
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
+# Copyright 2018 The fltkcon authors
 # Copyright 2018 The FDOSTUI authors
 # Copyright 2017-2018 The fltkal authors
 # Copyright 1998-2017 by Bill Spitzak and others.
