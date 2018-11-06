@@ -207,7 +207,7 @@ Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const
   l.measure(w, hp ? *hp : h);
   fl_draw_shortcut = 0;
 
-  if (flags & (FL_MENU_TOGGLE | FL_MENU_RADIO)) w += 1;
+  if (flags & (FL_MENU_TOGGLE | FL_MENU_RADIO)) w += 4;
 
   return w;
 }
@@ -380,7 +380,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   int Wtitle = 0;
   int Htitle = 0;
 
-  if (t) Wtitle = t->measure(&Htitle, button) + 12;
+  if (t) Wtitle = t->measure(&Htitle, button) + 1;
 
   int W = 0;
 
@@ -404,14 +404,14 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
 
           if (w1 > hotModsw) hotModsw = w1;
 
-          w1 = strlen(k) + 4;
+          w1 = strlen(k) + 1;
 
           if (w1 > hotKeysw) hotKeysw = w1;
         }
 
         else
         {
-          w1 = strlen(s) + 4;
+          w1 = strlen(s) + 1;
 
           if (w1 > (hotModsw + hotKeysw))
           {
@@ -426,7 +426,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (selected >= 0 && !Wp) X -= W / 2;
 
   int BW = 1;
-  W += hotKeysw + hotModsw + 2 * BW + 7;
+  W += hotKeysw + hotModsw + 2 * BW /*+ 7*/;
 
   if (Wp > W) W = Wp;
 
@@ -567,7 +567,8 @@ menuwindow::drawentry(
   int const n,
   bool const erase)
 {
-  if (!m) return; 
+
+  if (!m) return;
 
   int BW = 0;
   int xx = BW;
@@ -698,8 +699,7 @@ menuwindow::draw()
     }
   }
 
-  else if (damage() & FL_DAMAGE_CHILD
-           && selected != drawn_selected)
+  else if (damage() & FL_DAMAGE_CHILD && selected != drawn_selected)
   {
     if (-1 != drawn_selected)
     {
@@ -713,23 +713,19 @@ menuwindow::draw()
 
     if (-1 != selected)
     {
-      while (numitems > selected)
+      m = table[selected];
+
+      if (m)
       {
-        m = table[selected];
-
-        if (m)
-        {
-          drawentry(m, selected, 1);
-          break;
-        }
-
-        selected++;
+        drawentry(m, selected, 1);
       }
     }
   }
 
   drawn_selected = selected;
   Fl_Window_Driver::driver(this)->draw_end();
+
+  return;
 }
 
 void
@@ -745,6 +741,7 @@ menuwindow::set_selected(int n)
 int
 menuwindow::find_selected(int mx, int my)
 {
+
   if (!menu || !menu->text) return -1;
 
   mx -= x();
@@ -770,9 +767,11 @@ menuwindow::find_selected(int mx, int my)
     return n;
   }
 
+  if (mx < 0 || mx > w_) return -1;
+
   if (my < 0 || my >= numitems) return -1;
 
-  return my;
+  return (my + offset_y);
 }
 
 int
@@ -803,7 +802,7 @@ menuwindow::is_inside(int mx, int my)
   return 1;
 }
 
-#define INITIAL_STATE 0 
+#define INITIAL_STATE 0
 #define PUSH_STATE 1
 #define DONE_STATE 2
 #define MENU_PUSH_STATE 3
@@ -815,9 +814,9 @@ struct menustate
   int item_number;
   menuwindow* p[20];
   int nummenus;
-  int menubar; 
+  int menubar;
   int state;
-  menuwindow* fakemenu; 
+  menuwindow* fakemenu;
   int is_inside(int mx, int my);
 };
 static menustate* p = 0;
@@ -1126,19 +1125,65 @@ menuwindow::handle_part1(Fl_Event const e)
         }
       }
 
-      if (my == 0 && item > 0) setitem(mymenu, item - 1);
+      menuwindow* mw = pp.p[mymenu];
 
-      else setitem(mymenu, item);
-
-      if (e == FL_PUSH)
+      if (mw->itemheight && (1 < mw->numitems))
       {
-        if (pp.current_item && pp.current_item->submenu() 
-            && item != pp.p[mymenu]->selected
-            && !pp.current_item->callback_)
-          pp.state = MENU_PUSH_STATE;
+        if (pp.item_number == item)
+        {
+          if (item)
+          {
+            unsigned slot = (item - mw->offset_y);
 
-        else
-          pp.state = PUSH_STATE;
+            if (0 == slot)
+            {
+              do
+              {
+                item--;
+
+                if (0 == item || mw->table[item])
+                {
+                  break;
+                }
+              }
+              while (1);
+            }
+
+            else if (slot >= (mw->h_ - 1))
+            {
+              while (mw->numitems > (item + 1))
+              {
+                item++;
+
+                if (mw->table[item])
+                {
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        setitem(mw->table[item], mymenu, item);
+      }
+
+      else
+      {
+        setitem(mymenu, item);
+      }
+
+      if (mw->table[item])
+      {
+        if (e == FL_PUSH)
+        {
+          if (pp.current_item && pp.current_item->submenu()
+              && item != pp.p[mymenu]->selected
+              && !pp.current_item->callback_)
+            pp.state = MENU_PUSH_STATE;
+
+          else
+            pp.state = PUSH_STATE;
+        }
       }
     }
 
@@ -1151,8 +1196,8 @@ menuwindow::handle_part1(Fl_Event const e)
              || (pp.menubar && pp.current_item && !pp.current_item->submenu()) // button
          )
       {
-          if (!pp.current_item || pp.current_item->activevisible())
-            pp.state = DONE_STATE;
+        if (!pp.current_item || pp.current_item->activevisible())
+          pp.state = DONE_STATE;
       }
 
       return 1;

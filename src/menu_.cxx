@@ -354,7 +354,7 @@ first_submenu_item(Fl_Menu_Item* item, Fl_Menu_Item* start)
   }
 }
 
-
+void
 Fl_Menu_::setonly(Fl_Menu_Item* item)
 {
   Fl_Menu_Item* first = first_submenu_item(item, menu_);

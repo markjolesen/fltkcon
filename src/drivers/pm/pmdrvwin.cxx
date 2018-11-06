@@ -68,6 +68,7 @@
 #include "drvgr.h"
 #include "fl_draw.h"
 #include "platform.h"
+#include "mouse.h"
 #include <string.h>
 
 Window fl_window = 0;
@@ -87,7 +88,7 @@ Fl_PM_Window_Driver::Fl_PM_Window_Driver(Fl_Window* w) :
 
 Fl_PM_Window_Driver::~Fl_PM_Window_Driver()
 {
-    block_free(block_);
+  block_free(block_);
   return;
 }
 
@@ -101,34 +102,37 @@ void
 Fl_PM_Window_Driver::draw_begin()
 {
 
-    if (Fl_Widget::FL_DAMAGE_ALL & pWindow->damage())
+  mouse_hide();
+
+  if (Fl_Widget::FL_DAMAGE_ALL & pWindow->damage())
+  {
+
+    if (pWindow->get_border())
     {
-
-            if (pWindow->get_border())
-            {
-                Fl::draw_frame(
-                    (pWindow->x() - 1),
-                    (pWindow->y() - 1),
-                    (pWindow->w() + 2),
-                    (pWindow->h() + 2),
-                    pWindow->Fl_Widget::skin_.box_fcolor,
-                    pWindow->Fl_Widget::skin_.box_bcolor);
-            }
-
-            unsigned char const* label= pWindow->label();
-            if (label)
-            {
-                unsigned int len= (unsigned int)strlen((char const*)label);
-                int center= (((pWindow->w() + 2) / 2) - (len / 2));
-                Fl::draw_puts(
-                    (pWindow->x() + center - 1),
-                    (pWindow->y() - 1),
-                    label,
-                    len,
-                    pWindow->Fl_Widget::skin_.normal_fcolor,
-                    pWindow->Fl_Widget::skin_.normal_bcolor);
-            }
+      Fl::draw_frame(
+        (pWindow->x() - 1),
+        (pWindow->y() - 1),
+        (pWindow->w() + 2),
+        (pWindow->h() + 2),
+        pWindow->Fl_Widget::skin_.box_fcolor,
+        pWindow->Fl_Widget::skin_.box_bcolor);
     }
+
+    unsigned char const* label = pWindow->label();
+
+    if (label)
+    {
+      unsigned int len = (unsigned int)strlen((char const*)label);
+      int center = (((pWindow->w() + 2) / 2) - (len / 2));
+      Fl::draw_puts(
+        (pWindow->x() + center - 1),
+        (pWindow->y() - 1),
+        label,
+        len,
+        pWindow->Fl_Widget::skin_.normal_fcolor,
+        pWindow->Fl_Widget::skin_.normal_bcolor);
+    }
+  }
 
   Fl_Graphics_Driver::draw_offset_x = pWindow->x();
   Fl_Graphics_Driver::draw_offset_y = pWindow->y();
@@ -165,6 +169,8 @@ Fl_PM_Window_Driver::draw_end()
 
   Fl_Graphics_Driver::draw_offset_x = 0;
   Fl_Graphics_Driver::draw_offset_y = 0;
+
+  mouse_show();
 
   return;
 }
@@ -223,7 +229,9 @@ void
 Fl_PM_Window_Driver::erase_menu()
 {
 
-    block_write(block_);
+  mouse_hide();
+  block_write(block_);
+  mouse_show();
 
   return;
 }
@@ -234,20 +242,22 @@ Fl_PM_Window_Driver::show_menu()
 
   Fl_Window_Driver::show_menu();
 
-  int x= pWindow->x();
-  int y= pWindow->y();
-  int w= pWindow->w();
-  int h= pWindow->h();
+  int x = pWindow->x();
+  int y = pWindow->y();
+  int w = pWindow->w();
+  int h = pWindow->h();
 
-    if (pWindow->get_border())
-    {
-        x--;
-        y--;
-        w+=2;
-        h+=2;
-    }
+  if (pWindow->get_border())
+  {
+    x--;
+    y--;
+    w += 2;
+    h += 2;
+  }
 
-  block_read(block_, x, y, w, h); 
+  mouse_hide();
+  block_read(block_, x, y, w, h);
+  mouse_show();
 
   return;
 }
@@ -260,8 +270,8 @@ Fl_PM_Window_Driver::resize(int X, int Y, int W, int H)
 
 int
 Fl_PM_Window_Driver::scrollto(int src_x, int src_y, int src_w, int src_h,
-                                  int dest_x, int dest_y, void (*draw_area)(void*, int, int, int, int),
-                                  void* data)
+                              int dest_x, int dest_y, void (*draw_area)(void*, int, int, int, int),
+                              void* data)
 {
   return 0;
 }
