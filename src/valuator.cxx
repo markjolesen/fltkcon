@@ -71,7 +71,7 @@
 #include "fl.h"
 #include "flstring.h"
 
-#if defined(__DOS__)
+#if defined(__WATCOM_CPLUSPLUS__) && (__WATCOM_CPLUSPLUS__ < 1300)
 extern "C" double rint(double);
 #endif
 

@@ -23,7 +23,6 @@ video_addr dd 0b8000h ; video buffer linear address
 __video_cols dd 80 ; number of columns
 __video_rows dd 25 ; number of video rows
 video_line_size dd (2 * 80)  ; size of a line (__video_cols * 2) attr+char
-video_bytes dd (2 * 80 * 25) ; buffer size (video_line_size * __video_rows)
 video_line_offsets dd VIDEO_MAX_ROWS dup(0) ; start of line video_line_offsets
 
 .CODE
@@ -64,7 +63,7 @@ screen_init_ PROC
     
 notmda:
 
-    cmp al, 3 ; check if mode 3 text 80x25
+    cmp al, 3 ; check if mode 3
     je vidset
     
     ; switch to video mode 3
@@ -82,6 +81,22 @@ vidset:
     mov ax, 1003h
     xor bl, bl
     int 10h
+    
+    ; 1130h Get Font infomration
+    ; returns
+    ; cx number of bytes per character
+    ; dl characters rows on screen - 1
+    ; es:bp pointer to requested font
+    push ebp
+    mov ax, 1130h
+    xor bx, bx ; bh 00h get current intterupt 1fh pointer
+    int 10h
+    pop ebp
+    push ds
+    pop es
+    movzx eax, dl
+    inc eax
+    mov [dword ptr __video_rows], eax
 
     ; fill line video_line_offsets
     xor eax, eax
@@ -145,11 +160,6 @@ screen_set25lines_ PROC
     int 10h
     
     mov [dword ptr __video_rows], 25
-    mov eax, [dword ptr __video_cols]
-    shl eax, 1
-    mov ecx, 25
-    mul ecx
-    mov [dword ptr video_bytes], eax
     
     xor eax, eax
 
@@ -192,11 +202,6 @@ screen_set50lines_ PROC
     int 10h
     
     mov [dword ptr __video_rows], 50 
-    mov eax, [dword ptr __video_cols]
-    shl eax, 1
-    mov ecx, 50
-    mul ecx
-    mov [dword ptr video_bytes], eax
     
     xor eax, eax
     jmp set50_exit
@@ -236,8 +241,10 @@ screen_fill_ PROC
     mov ah, dl
     
     mov edi, [dword ptr video_addr]
-    mov ecx, [dword ptr video_bytes]
-    shr ecx, 1 ; convert size to words
+    mov eax, [dword ptr __video_cols]
+    mov ecx, [dword ptr __video_rows]
+    mul ecx
+    shr ecx, 1
     rep stosw
     
     pop edi

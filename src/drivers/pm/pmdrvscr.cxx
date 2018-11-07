@@ -89,8 +89,8 @@ Fl_PM_Screen_Driver::Fl_PM_Screen_Driver() :
     prev_.m_btn_state= 0;
     screen_init();
     Fl::caret_hide();
-    mouse_init();
     screen_fill(0x20, fcolor_white, bcolor_black);
+    mouse_init();
     mouse_show();
   return;
 }

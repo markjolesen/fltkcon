@@ -581,11 +581,8 @@ menuwindow::drawentry(
 
   if (m->submenu())
   {
-    int sz = (hh - 7) & -2;
-    int y1 = yy + (hh - sz) / 2;
-    int x1 = xx + ww - sz - 3;
-    Fl::draw_putc(x1, y1, '+', 1, Fl_Widget::skin_.menu_fcolor,
-                  Fl_Widget::skin_.menu_bcolor);
+    Fl::draw_putc((xx + ww - 2), yy, Fl::_skin_sym.right, 1,
+        Fl_Widget::skin_.menu_fcolor, Fl_Widget::skin_.menu_bcolor);
   }
 
   else if (m->shortcut_)
