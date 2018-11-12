@@ -236,15 +236,17 @@ screen_fill_ PROC
     push edx
     push edi
     
-    shl ebx, 4
+    shl bl, 4
     or dl, bl
     mov ah, dl
     
+    push eax
     mov edi, [dword ptr video_addr]
     mov eax, [dword ptr __video_cols]
     mov ecx, [dword ptr __video_rows]
     mul ecx
-    shr ecx, 1
+    mov ecx, eax
+    pop eax
     rep stosw
     
     pop edi
@@ -766,9 +768,9 @@ screen_getc_ ENDP
 ; ebx column
 ; ecx row
 ; outputs:
-; ax:dx ending address
+; eax ending address
 ; destroys
-; ax dx
+; eax
 PUBLIC screen_read_
 screen_read_ PROC 
 
@@ -835,6 +837,94 @@ read_exit:
     
     ret
 screen_read_ ENDP
+
+; read vertical column from screen
+; eax offset of output
+; edx number of rows
+; ebx column
+; ecx row
+; outputs:
+; eax ending address
+; destroys
+; eax
+PUBLIC screen_readv_
+screen_readv_ PROC 
+
+    push ebx
+    push ecx
+    push edx
+    push esi
+    push edi
+    
+    mov edi, eax; edi address of output buffer
+    
+    or edx, edx
+    jz readv_exit
+    
+    cmp ebx, 0
+    jl readv_exit
+    
+    cmp ebx, [dword ptr __video_cols]
+    jge readv_exit
+    
+    cmp ecx, [dword ptr __video_rows]
+    jge readv_exit
+    
+    ; adjust until row is 0
+readv_adjust:
+
+    cmp ecx, 0
+    jge readv_start
+    inc ecx ; row
+    dec edx ; number of rows
+    jz readv_exit
+    jmp readv_adjust
+   
+readv_start:
+
+    mov eax, ebx
+    shl eax, 1 ; each column is 2 bytes (char+attr)
+    
+    ; set esi to precomputed line address
+    mov ebx, ecx ; row coordinate
+    shl ebx, 2 ; index into video_line_offsets (row * 4)
+    mov esi, [dword ptr video_line_offsets][ebx]
+    add esi, eax ; add column
+    or esi, [dword ptr video_addr]
+    
+    mov eax, edx ; number of rows
+    add eax, ecx ; start row
+    cmp eax, [dword ptr __video_rows]
+    jl  readv_set
+    
+    mov edx, [dword ptr __video_rows] ; calculate number of rows
+    sub edx, ecx
+    
+readv_set:
+
+    mov ecx, edx ; number of rows
+    mov ebx, [dword ptr __video_cols]
+    shl ebx, 1
+    
+readv_loop:
+
+    mov ax, [word ptr esi]
+    stosw
+    add esi, ebx
+    loop readv_loop
+ 
+readv_exit:
+
+    mov eax, edi
+    
+    pop edi
+    pop esi
+    pop edx
+    pop ecx
+    pop ebx
+    
+    ret
+screen_readv_ ENDP
 
 ; write to screen
 ; inputs:
@@ -921,5 +1011,87 @@ write_exit:
     ret
     
 screen_write_ ENDP
+
+; write vertical column to screen
+; inputs:
+; eax column
+; edx row
+; ebx buffer address
+; ecx number of rows
+; outputs:
+; eax ending address
+; destroys
+; eax 
+PUBLIC screen_writev_
+screen_writev_ PROC 
+    
+    push ebx
+    push ecx
+    push esi
+    push edi
+    
+    mov esi, ebx ; buffer offset
+    
+    or ecx, ecx
+    jz writev_ret1
+    
+    or eax, eax
+    jl  writev_ret1
+    
+    cmp eax, [dword ptr __video_cols]
+    jge writev_ret1
+    
+    cmp edx, [dword ptr __video_rows]
+    jge writev_ret1
+   
+    ; adjust until row is 0
+writev_adjust:
+
+    cmp edx, 0
+    jge writev_start
+    inc edx
+    loop writev_adjust
+    jmp writev_ret1
+ 
+writev_start:
+
+    ; esi address
+    ; eax video column   
+    ; ecx repeat count
+    ; edx video row
+    
+    shl eax, 1 ; each column is 2 bytes (char+attr)
+    ; set edi to precomputed line address
+    mov ebx, edx ; row coordinate
+    shl ebx, 2 ; index into video_line_offsets (row * 4)
+    mov edi, [dword ptr video_line_offsets][ebx]
+    add edi, eax ; add column
+    or edi, [dword ptr video_addr]
+    
+    mov ebx, [dword ptr video_line_size]
+    
+writev_loop:
+
+    lodsw
+    mov [word ptr edi], ax
+    add edi, ebx
+    inc edx
+    cmp edx, [dword ptr __video_rows]
+    jge writev_ret1
+    loop writev_loop
+    
+writev_ret1:
+    mov eax, esi
+    
+writev_exit:
+
+    pop edi
+    pop esi
+    pop ecx
+    pop ebx
+
+    ret
+    
+screen_writev_ ENDP
 
 END

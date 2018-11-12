@@ -39,7 +39,19 @@ block_read(
   unsigned int const i_len_y);
 
 extern void
+block_read_frame(
+  struct block* const io_block,
+  int const i_pos_x,
+  int const i_pos_y,
+  unsigned int const i_len_x,
+  unsigned int const i_len_y);
+
+extern void
 block_write(
+  struct block const* const i_block);
+
+extern void
+block_write_frame(
   struct block const* const i_block);
 
 #ifdef __cplusplus

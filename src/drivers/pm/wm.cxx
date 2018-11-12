@@ -65,6 +65,11 @@
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include "wm.h"
+#include "block.h"
+#include "fl.h"
+#include "fl_draw.h"
+#include "mouse.h"
+#include "platform.h"
 #include "pmdrvwin.h"
 
 wm::wm()
@@ -75,77 +80,328 @@ wm::~wm()
 {
 }
 
-wm::hit_type
-wm::hit(Fl_Window& window, int const x, int const y) const
+wm::hit_type wm::hit(Fl_Window &window, int const x, int const y) const
 {
-  return HIT_NONE;
+    hit_type what = HIT_NONE;
+
+    do
+    {
+
+        int top= window.y() - 1;
+        int left = window.x() - 1;
+        int right = window.x() + window.w();
+        int bottom = window.y() + window.h();
+
+        if (x == left)
+        {
+                if (y == top)
+                {
+                    what = HIT_NORTH_WEST;
+                }
+                else if (y == bottom)
+                {
+                    what = HIT_SOUTH_WEST;
+                }
+                else
+                {
+                    what = HIT_WEST;
+                }
+            break;
+        }
+
+        if (x == right)
+        {
+                if (y == top)
+                {
+                    what = HIT_NORTH_EAST;
+                }
+                else if (y == bottom)
+                {
+                    what = HIT_SOUTH_EAST;
+                }
+                else
+                {
+                    what = HIT_EAST;
+                }
+            break;
+        }
+
+        if (y == top)
+        {
+                what = HIT_MOVE;
+            break;
+        }
+
+        if (y == bottom)
+        {
+            what = HIT_SOUTH;
+            break;
+        }
+
+        what = HIT_WINDOW;
+    }
+    while (0);
+
+    return what;
 }
 
-bool
-wm::handle_push(Fl_Window& window, hit_type const what, int const x,
-                int const y) const
+bool wm::handle_push(Fl_Window &window, hit_type const what, int const x, int const y) const
 {
-  return false;
+    bool handled = false;
+
+    do
+    {
+
+        if (!(FL_WINDOW == window.type() || FL_DOUBLE_WINDOW == window.type()))
+        {
+            break;
+        }
+
+        if (HIT_WINDOW == what)
+        {
+            break;
+        }
+
+        if (HIT_NONE != what)
+        {
+            if (window.modal() && HIT_MOVE != what)
+            {
+                break;
+            }
+            handle_push(window, what);
+            handled = true;
+            break;
+        }
+
+        if (window.modal())
+        {
+            break;
+        }
+
+        Fl_X *i;
+        for (Fl_X **pp = &Fl_X::first; (i = *pp); pp = &i->next)
+        {
+            Fl_Window *wi = i->w;
+            if (wi != &window)
+            {
+                hit_type what2 =  hit((*wi), x, y);
+                if (what2)
+                {
+                    *pp = i->next;
+                    i->next = Fl_X::first;
+                    Fl_X::first = i;
+                    wi->take_focus();
+                    break;
+                }
+            }
+        }
+
+    }
+    while (0);
+
+    return handled;
 }
 
-static inline void
-resize_east(int& left, int& top, int& width, int& height, int const delta_x,
-            int const delta_y)
+static inline void resize_east(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
+    width += delta_x;
+    if (Fl_PM_Window_Driver::window_min_width > width)
+    {
+        width = Fl_PM_Window_Driver::window_min_width;
+    }
 }
 
-static inline void
-resize_west(int& left, int& top, int& width, int& height, int const delta_x,
-            int const delta_y)
+static inline void resize_west(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
+    width -= delta_x;
+    if (Fl_PM_Window_Driver::window_min_width < width)
+    {
+        left += delta_x;
+    }
+    else
+    {
+        width += delta_x;
+    }
 }
 
-static inline void
-resize_north(int& left, int& top, int& width, int& height, int const delta_x,
-             int const delta_y)
+static inline void resize_north(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
+    height -= delta_y;
+    if (Fl_PM_Window_Driver::window_min_height < height)
+    {
+        top += delta_y;
+    }
+    else
+    {
+        height += delta_y;
+    }
 }
 
-static inline void
-resize_south(int& left, int& top, int& width, int& height, int const delta_x,
-             int const delta_y)
+static inline void resize_south(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
+    height += delta_y;
+    if (Fl_PM_Window_Driver::window_min_height > height)
+    {
+        height = Fl_PM_Window_Driver::window_min_height;
+    }
 }
 
-static inline void
-resize_north_east(int& left, int& top, int& width, int& height,
-                  int const delta_x, int const delta_y)
+static inline void resize_north_east(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
-  resize_north(left, top, width, height, delta_x, delta_y);
-  resize_east(left, top, width, height, delta_x, delta_y);
+    resize_north(left, top, width, height, delta_x, delta_y);
+    resize_east(left, top, width, height, delta_x, delta_y);
 }
 
-static inline void
-resize_north_west(int& left, int& top, int& width, int& height,
-                  int const delta_x, int const delta_y)
+static inline void resize_north_west(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
-  resize_north(left, top, width, height, delta_x, delta_y);
-  resize_west(left, top, width, height, delta_x, delta_y);
+    resize_north(left, top, width, height, delta_x, delta_y);
+    resize_west(left, top, width, height, delta_x, delta_y);
 }
 
-static inline void
-resize_south_east(int& left, int& top, int& width, int& height,
-                  int const delta_x, int const delta_y)
+static inline void resize_south_east(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
-  resize_south(left, top, width, height, delta_x, delta_y);
-  resize_east(left, top, width, height, delta_x, delta_y);
+    resize_south(left, top, width, height, delta_x, delta_y);
+    resize_east(left, top, width, height, delta_x, delta_y);
 }
 
-static inline void
-resize_south_west(int& left, int& top, int& width, int& height,
-                  int const delta_x, int const delta_y)
+static inline void resize_south_west(int &left, int &top, int &width, int &height, int const delta_x, int const delta_y)
 {
-  resize_south(left, top, width, height, delta_x, delta_y);
-  resize_west(left, top, width, height, delta_x, delta_y);
+    resize_south(left, top, width, height, delta_x, delta_y);
+    resize_west(left, top, width, height, delta_x, delta_y);
 }
 
-void
-wm::handle_push(Fl_Window& window, hit_type const what) const
+void wm::handle_push(Fl_Window &window, hit_type const what) const
 {
-  return;
+    struct block* blk;
+    int left = window.x() - 1;
+    int top = window.y() - 1;
+    int width = window.w() + 2;
+    int height = window.h() + 2;
+    int left_orig = left;
+    int top_orig = top;
+    int width_orig = width;
+    int height_orig = height;
+    int rc;
+
+    blk= block_new();
+    mouse_hide();
+    block_read_frame(blk, left, top, width, height);
+    Fl::draw_frame(left, top, width, height, Fl::fcolor_red, Fl::bcolor_light_gray);
+    mouse_show();
+
+    do
+    {
+
+        struct mouse_event mouse;
+
+        rc= mouse_get_event(&mouse);
+
+        if (0 == rc)
+        {
+            continue;
+        }
+
+        mouse.m_curs_col= (mouse.m_curs_col >> 3);
+        mouse.m_curs_row= (mouse.m_curs_row >> 3);
+
+        if (0 == mouse.m_btn_state)
+        {
+            if (left_orig != left ||
+                    top_orig != top ||
+                    width_orig != width ||
+                    height_orig != height)
+            {
+                window.resize(left + 1, top + 1, width - 2, height - 2);
+                Fl::redraw();
+                Fl::flush();
+            }
+            else
+            {
+                mouse_hide();
+                block_write_frame(blk);
+                mouse_show();
+            }
+
+            break;
+        }
+
+        int delta_x = (mouse.m_curs_col - Fl::e_x_root);
+        int delta_y = (mouse.m_curs_row - Fl::e_y_root);
+        int movement = (abs(delta_x) + abs(delta_y));
+
+        Fl::e_x_root = mouse.m_curs_col;
+        Fl::e_y_root = mouse.m_curs_row;
+
+        if (movement)
+        {
+            int left1 = left;
+            int top1 = top;
+            int width1 = width;
+            int height1 = height;
+            switch (what)
+            {
+            case HIT_MOVE:
+            {
+                top += delta_y;
+                left += delta_x;
+                break;
+            }
+            case HIT_EAST:
+            {
+                resize_east(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_WEST:
+            {
+                resize_west(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_SOUTH:
+            {
+                resize_south(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_NORTH_EAST:
+            {
+                resize_north_east(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_NORTH_WEST:
+            {
+                resize_north_west(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_SOUTH_EAST:
+            {
+                resize_south_east(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            case HIT_SOUTH_WEST:
+            {
+                resize_south_west(left, top, width, height, delta_x, delta_y);
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (left1 != left ||
+                    top1 != top ||
+                    width1 != width ||
+                    height1 != height)
+            {
+                mouse_hide();
+                block_write_frame(blk);
+                block_read_frame(blk, left, top, width, height);
+                Fl::draw_frame(left, top, width, height, Fl::fcolor_red, Fl::bcolor_light_gray);
+                mouse_show();
+            }
+        }
+
+    }
+    while (1);
+
+    block_free(blk);
+
+    return;
 }

@@ -84,7 +84,6 @@ class wm
       HIT_MOVE,
       HIT_EAST,
       HIT_WEST,
-      HIT_NORTH,
       HIT_NORTH_EAST,
       HIT_NORTH_WEST,
       HIT_SOUTH,
@@ -99,7 +98,7 @@ class wm
 
   protected:
 
-    void handle_push(Fl_Window& window, hit_type const what) const;
+    void handle_push(Fl_Window &window, hit_type const what) const;
 
   private:
 

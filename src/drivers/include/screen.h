@@ -270,12 +270,26 @@ screen_read(
     int const                           i_col,
     int const                           i_row);
 
+extern screen_block_t __FAR*
+screen_readv(
+    screen_block_t __FAR*               o_block,
+    unsigned int const                  i_rows,
+    int const                           i_col,
+    int const                           i_row);
+
 extern screen_block_t const __FAR*
 screen_write(
     int const                           i_col,
     int const                           i_row,
     screen_block_t const __FAR*         i_block,
     unsigned int const                  i_columns);
+
+extern screen_block_t const __FAR*
+screen_writev(
+    int const                           i_col,
+    int const                           i_row,
+    screen_block_t const __FAR*         i_block,
+    unsigned int const                  i_rows);
 
 extern void
 screen_push(

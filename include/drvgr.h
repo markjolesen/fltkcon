@@ -195,6 +195,18 @@ class Fl_Graphics_Driver
       enum Fl::foreground const i_fcolor,
       enum Fl::background const i_bcolor) const;
 
+    void
+    flip_to_offscreen(bool i_copy) const;
+
+    void
+    flip_to_onscreen() const;
+
+    void
+    mouse_hide();
+
+    void
+    mouse_show();
+
 };
 
 namespace Fl

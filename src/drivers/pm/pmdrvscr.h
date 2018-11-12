@@ -78,6 +78,7 @@ class Fl_PM_Screen_Driver : public Fl_Screen_Driver
 
   protected:
 
+    wm wm_;
     struct mouse_event prev_;
 
     void
@@ -90,6 +91,9 @@ class Fl_PM_Screen_Driver : public Fl_Screen_Driver
     event_mouse(
         Fl_Window& window,
         struct mouse_event const& mouse);
+
+    int
+    wait_mouse(Fl_Window& window);
 
   public:
 

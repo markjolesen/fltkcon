@@ -72,6 +72,7 @@
 #include "screen.h"
 #include "fl_skin.h"
 #include "fl_caret.h"
+#include "wm.h"
 
 extern void fl_fix_focus();
 
@@ -82,23 +83,24 @@ Fl_Screen_Driver::newScreenDriver()
 }
 
 Fl_PM_Screen_Driver::Fl_PM_Screen_Driver() :
-  Fl_Screen_Driver()
+  Fl_Screen_Driver(),
+  wm_()
 {
-    prev_.m_curs_col= 0;
-    prev_.m_curs_row= 0;
-    prev_.m_btn_state= 0;
-    screen_init();
-    Fl::caret_hide();
-    screen_fill(0x20, fcolor_white, bcolor_black);
-    mouse_init();
-    mouse_show();
+  prev_.m_curs_col = 0;
+  prev_.m_curs_row = 0;
+  prev_.m_btn_state = 0;
+  screen_init();
+  Fl::caret_hide();
+  screen_fill(0x20, fcolor_white, bcolor_black);
+  mouse_init();
+  mouse_show();
   return;
 }
 
 Fl_PM_Screen_Driver::~Fl_PM_Screen_Driver()
 {
-    mouse_deinit();
-    screen_deinit();
+  mouse_deinit();
+  screen_deinit();
   return;
 }
 
@@ -147,7 +149,7 @@ Fl_PM_Screen_Driver::screen_xywh(int& X, int& Y, int& W, int& H, int /*n*/)
 
 void
 Fl_PM_Screen_Driver::screen_work_area(int& X, int& Y, int& W, int& H,
-                                          int /*n*/)
+                                      int /*n*/)
 {
   X = 0;
   Y = 0;
@@ -168,40 +170,40 @@ Fl_PM_Screen_Driver::flush()
 
 void
 Fl_PM_Screen_Driver::event_key(
-    Fl_Window& window,
-    unsigned char const scan,
-    unsigned char const ascii) const
+  Fl_Window& window,
+  unsigned char const scan,
+  unsigned char const ascii) const
 {
   unsigned char buf[2];
   int sym = 0;
-  Fl_Window* w= &window;
+  Fl_Window* w = &window;
 
-  char kb0= *(char*)0x0417;
-  char kb1= *(char*)0x0418;
+  char kb0 = *(char*)0x0417;
+  char kb1 = *(char*)0x0418;
 
   if (0x3 & kb0)
   {
-    Fl::e_state|= FL_SHIFT;
+    Fl::e_state |= FL_SHIFT;
   }
 
   if (0x4 & kb0)
   {
-    Fl::e_state|= FL_CTRL;
+    Fl::e_state |= FL_CTRL;
   }
 
   if (0x8 & kb0)
   {
-    Fl::e_state|= FL_ALT;
+    Fl::e_state |= FL_ALT;
   }
 
   if (0x1 & kb1)
   {
-    Fl::e_state|= FL_CTRL;
+    Fl::e_state |= FL_CTRL;
   }
 
   if (0x2 & kb1)
   {
-    Fl::e_state|= FL_ALT;
+    Fl::e_state |= FL_ALT;
   }
 
   buf[0] = 0;
@@ -211,304 +213,371 @@ Fl_PM_Screen_Driver::event_key(
 
   if (ascii)
   {
-    switch(ascii)
+    switch (ascii)
     {
       case ASCII_BS:
         sym = FL_BackSpace;
         break;
+
       case ASCII_TAB:
         sym = FL_Tab;
         break;
+
       case ASCII_ENTER:
         sym = FL_Enter;
         break;
+
       case ASCII_ESC:
         sym = FL_Escape;
-        while(w->parent())
+
+        while (w->parent())
         {
-          w= w->window();
+          w = w->window();
         }
+
         break;
+
       default:
         sym = ascii;
         break;
     }
   }
+
   else
   {
-    switch(scan)
+    switch (scan)
     {
 #if 0
-    case SCAN_F1:
-    case SCAN_F2:
-    case SCAN_F3:
-    case SCAN_F4:
-    case SCAN_F5:
-    case SCAN_F6:
-    case SCAN_F7:
-    case SCAN_F8:
-    case SCAN_F9:
-    case SCAN_F10:
+
+      case SCAN_F1:
+      case SCAN_F2:
+      case SCAN_F3:
+      case SCAN_F4:
+      case SCAN_F5:
+      case SCAN_F6:
+      case SCAN_F7:
+      case SCAN_F8:
+      case SCAN_F9:
+      case SCAN_F10:
 #endif
-    case SCAN_HOME:
-        sym= FL_Home;
+      case SCAN_HOME:
+        sym = FL_Home;
         break;
-    case SCAN_UP:
-        sym= FL_Up;
+
+      case SCAN_UP:
+        sym = FL_Up;
         break;
-    case SCAN_PGUP:
-    	sym= FL_Page_Up;
+
+      case SCAN_PGUP:
+        sym = FL_Page_Up;
         break;
-    case SCAN_LEFT:
-        sym= FL_Left;
+
+      case SCAN_LEFT:
+        sym = FL_Left;
         break;
-    case SCAN_RIGHT:
-        sym= FL_Right;
+
+      case SCAN_RIGHT:
+        sym = FL_Right;
         break;
-    case SCAN_END:
-        sym= FL_End;
+
+      case SCAN_END:
+        sym = FL_End;
         break;
-    case SCAN_DOWN:
-        sym= FL_Down;
+
+      case SCAN_DOWN:
+        sym = FL_Down;
         break;
-    case SCAN_PGDN:
-        sym= FL_Page_Down;
+
+      case SCAN_PGDN:
+        sym = FL_Page_Down;
         break;
-    case SCAN_INS:
-        sym= FL_Insert;
-            Fl::_caret_mode= static_cast<enum Fl::caret_mode>(!static_cast<int>(Fl::_caret_mode));
-            if (Fl::_caret_is_visible)
-            {
-                if (Fl::CARET_OVERWRITE == Fl::_caret_mode)
-                {
-                    Fl::caret_block();
-                }
-                else
-                {
-                    Fl::caret_underline();
-                }
-            }
-            else
-            {
-                Fl::caret_hide();
-            }
+
+      case SCAN_INS:
+        sym = FL_Insert;
+        Fl::_caret_mode = static_cast<enum Fl::caret_mode>(!static_cast<int>
+                                                           (Fl::_caret_mode));
+
+        if (Fl::_caret_is_visible)
+        {
+          if (Fl::CARET_OVERWRITE == Fl::_caret_mode)
+          {
+            Fl::caret_block();
+          }
+
+          else
+          {
+            Fl::caret_underline();
+          }
+        }
+
+        else
+        {
+          Fl::caret_hide();
+        }
+
         break;
-    case SCAN_DEL:
-        sym= FL_Delete;
+
+      case SCAN_DEL:
+        sym = FL_Delete;
         break;
-    case SCAN_SHIFT_TAB:
+
+      case SCAN_SHIFT_TAB:
         sym = FL_Tab;
-        Fl::e_state|= FL_SHIFT;
+        Fl::e_state |= FL_SHIFT;
         break;
 #if 0
-    case SCAN_SHIFT_F1:
-    case SCAN_SHIFT_F2:
-    case SCAN_SHIFT_F3:
-    case SCAN_SHIFT_F4:
-    case SCAN_SHIFT_F5:
-    case SCAN_SHIFT_F6:
-    case SCAN_SHIFT_F7:
-    case SCAN_SHIFT_F8:
-    case SCAN_SHIFT_F9:
-    case SCAN_SHIFT_F10:
+
+      case SCAN_SHIFT_F1:
+      case SCAN_SHIFT_F2:
+      case SCAN_SHIFT_F3:
+      case SCAN_SHIFT_F4:
+      case SCAN_SHIFT_F5:
+      case SCAN_SHIFT_F6:
+      case SCAN_SHIFT_F7:
+      case SCAN_SHIFT_F8:
+      case SCAN_SHIFT_F9:
+      case SCAN_SHIFT_F10:
 #endif
-    case SCAN_ALT_1:
-        sym= '1';
-        Fl::e_state|= FL_ALT;
+      case SCAN_ALT_1:
+        sym = '1';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_2:
-        sym= '2';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_2:
+        sym = '2';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_3:
-        sym= '3';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_3:
+        sym = '3';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_4:
-        sym= '4';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_4:
+        sym = '4';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_5:
-        sym= '5';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_5:
+        sym = '5';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_6:
-        sym= '6';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_6:
+        sym = '6';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_7:
-        sym= '7';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_7:
+        sym = '7';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_8:
-        sym= '8';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_8:
+        sym = '8';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_9:
-        sym= '9';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_9:
+        sym = '9';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_0:
-        sym= '0';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_0:
+        sym = '0';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_MINUS:
-        sym= '-';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_MINUS:
+        sym = '-';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_PLUS:
-        sym= '+';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_PLUS:
+        sym = '+';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_Q:
-        sym= 'q';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_Q:
+        sym = 'q';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_W:
-        sym= 'w';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_W:
+        sym = 'w';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_E:
-        sym= 'e';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_E:
+        sym = 'e';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_R:
-        sym= 'r';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_R:
+        sym = 'r';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_T:
-        sym= 't';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_T:
+        sym = 't';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_Y:
-        sym= 'y';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_Y:
+        sym = 'y';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_U:
-        sym= 'u';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_U:
+        sym = 'u';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_I:
-        sym= 'i';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_I:
+        sym = 'i';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_O:
-        sym= 'o';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_O:
+        sym = 'o';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_P:
-        sym= 'p';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_P:
+        sym = 'p';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_A:
-        sym= 'a';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_A:
+        sym = 'a';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_S:
-        sym= 's';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_S:
+        sym = 's';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_D:
-        sym= 'd';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_D:
+        sym = 'd';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_F:
-        sym= 'f';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_F:
+        sym = 'f';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_G:
-        sym= 'g';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_G:
+        sym = 'g';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_H:
-        sym= 'h';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_H:
+        sym = 'h';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_J:
-        sym= 'j';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_J:
+        sym = 'j';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_K:
-        sym= 'k';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_K:
+        sym = 'k';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_L:
-        sym= 'l';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_L:
+        sym = 'l';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_Z:
-        sym= 'z';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_Z:
+        sym = 'z';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_X:
-        sym= 'x';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_X:
+        sym = 'x';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_C:
-        sym= 'c';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_C:
+        sym = 'c';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_V:
-        sym= 'v';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_V:
+        sym = 'v';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_B:
-        sym= 'r';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_B:
+        sym = 'r';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_N:
-        sym= 'n';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_N:
+        sym = 'n';
+        Fl::e_state |= FL_ALT;
         break;
-    case SCAN_ALT_M:
-        sym= 'm';
-        Fl::e_state|= FL_ALT;
+
+      case SCAN_ALT_M:
+        sym = 'm';
+        Fl::e_state |= FL_ALT;
         break;
 #if 0
-    case SCAN_ALT_F1:
-    case SCAN_ALT_F2:
-    case SCAN_ALT_F3:
-    case SCAN_ALT_F4:
-    case SCAN_ALT_F5:
-    case SCAN_ALT_F6:
-    case SCAN_ALT_F7:
-    case SCAN_ALT_F8:
-    case SCAN_ALT_F9:
-    case SCAN_ALT_F10:
-    case SCAN_CTL_F1:
-    case SCAN_CTL_F2:
-    case SCAN_CTL_F3:
-    case SCAN_CTL_F4:
-    case SCAN_CTL_F5:
-    case SCAN_CTL_F6:
-    case SCAN_CTL_F7:
-    case SCAN_CTL_F8:
-    case SCAN_CTL_F9:
-    case SCAN_CTL_F10:
+
+      case SCAN_ALT_F1:
+      case SCAN_ALT_F2:
+      case SCAN_ALT_F3:
+      case SCAN_ALT_F4:
+      case SCAN_ALT_F5:
+      case SCAN_ALT_F6:
+      case SCAN_ALT_F7:
+      case SCAN_ALT_F8:
+      case SCAN_ALT_F9:
+      case SCAN_ALT_F10:
+      case SCAN_CTL_F1:
+      case SCAN_CTL_F2:
+      case SCAN_CTL_F3:
+      case SCAN_CTL_F4:
+      case SCAN_CTL_F5:
+      case SCAN_CTL_F6:
+      case SCAN_CTL_F7:
+      case SCAN_CTL_F8:
+      case SCAN_CTL_F9:
+      case SCAN_CTL_F10:
 #endif
-    case SCAN_CTL_HOME:
-        sym= FL_Home;
-        Fl::e_state|= FL_CTRL;
+      case SCAN_CTL_HOME:
+        sym = FL_Home;
+        Fl::e_state |= FL_CTRL;
         break;
-    case SCAN_CTL_PGUP:
-        sym= FL_Page_Up;
-        Fl::e_state|= FL_CTRL;
+
+      case SCAN_CTL_PGUP:
+        sym = FL_Page_Up;
+        Fl::e_state |= FL_CTRL;
         break;
-    case SCAN_CTL_LEFT:
-        sym= FL_Left;
-        Fl::e_state|= FL_CTRL;
+
+      case SCAN_CTL_LEFT:
+        sym = FL_Left;
+        Fl::e_state |= FL_CTRL;
         break;
-    case SCAN_CTL_RIGHT:
-        sym= FL_Right;
-        Fl::e_state|= FL_CTRL;
+
+      case SCAN_CTL_RIGHT:
+        sym = FL_Right;
+        Fl::e_state |= FL_CTRL;
         break;
-    case SCAN_CTL_END:
-        sym= FL_End;
-        Fl::e_state|= FL_CTRL;
+
+      case SCAN_CTL_END:
+        sym = FL_End;
+        Fl::e_state |= FL_CTRL;
         break;
-    case SCAN_CTL_PGDN:
-        sym= FL_Page_Down;
-        Fl::e_state|= FL_CTRL;
+
+      case SCAN_CTL_PGDN:
+        sym = FL_Page_Down;
+        Fl::e_state |= FL_CTRL;
         break;
     }
   }
@@ -519,83 +588,149 @@ Fl_PM_Screen_Driver::event_key(
     Fl::e_length = 1;
   }
 
-    Fl::e_keysym = sym;
-    Fl::e_number = FL_KEYBOARD;
-    Fl::handle(FL_KEYBOARD, w);
+  Fl::e_keysym = sym;
+  Fl::e_number = FL_KEYBOARD;
+  Fl::handle(FL_KEYBOARD, w);
 
-    return;
+  return;
 }
 
 void
 Fl_PM_Screen_Driver::event_mouse(
-    Fl_Window& window,
-    struct mouse_event const& mouse)
+  Fl_Window& window,
+  struct mouse_event const& mouse)
 {
-    int col= (mouse.m_curs_col / 8);
-    int row= (mouse.m_curs_row / 8);
 
-    Fl::e_x_root = col;
-    Fl::e_y_root = row;
-    Fl::e_x = col - window.x();
-    Fl::e_y = row - window.y();
+  Fl::e_x_root = mouse.m_curs_col;
+  Fl::e_y_root = mouse.m_curs_row;
+  Fl::e_x = mouse.m_curs_col - window.x();
+  Fl::e_y = mouse.m_curs_row - window.y();
 
-    int movement= (mouse.m_curs_col - prev_.m_curs_col) +
-        (mouse.m_curs_row - prev_.m_curs_row);
+  int movement = (mouse.m_curs_col - prev_.m_curs_col) +
+                 (mouse.m_curs_row - prev_.m_curs_row);
 
-    unsigned short int btnp= prev_.m_btn_state;
-    prev_.m_curs_col= mouse.m_curs_col;
-    prev_.m_curs_row= mouse.m_curs_row;
-    prev_.m_btn_state= mouse.m_btn_state;
+  unsigned short int btnp = prev_.m_btn_state;
+  prev_.m_curs_col = mouse.m_curs_col;
+  prev_.m_curs_row = mouse.m_curs_row;
+  prev_.m_btn_state = mouse.m_btn_state;
 
-        if (1 & mouse.m_btn_state)
-        {
-            Fl::e_state |= FL_BUTTON1;
-            Fl::e_keysym = (FL_Button | FL_LEFT_MOUSE);
-        }
+  if (1 & mouse.m_btn_state)
+  {
+    Fl::e_state |= FL_BUTTON1;
+    Fl::e_keysym = (FL_Button | FL_LEFT_MOUSE);
+  }
 
-        if (2 & mouse.m_btn_state)
-        {
-            Fl::e_state |= FL_BUTTON2;
-            Fl::e_keysym = (FL_Button | FL_RIGHT_MOUSE);
-        }
+  if (2 & mouse.m_btn_state)
+  {
+    Fl::e_state |= FL_BUTTON2;
+    Fl::e_keysym = (FL_Button | FL_RIGHT_MOUSE);
+  }
 
-    do
+  do
+  {
+
+    if (3 & mouse.m_btn_state)
     {
-
-        if (3 & mouse.m_btn_state)
-        {
-                if (btnp)
-                {
-                    if (movement)
-                    {
-                        Fl::handle(FL_DRAG, &window);
-                    }
-                }
-                else
-                {
-                    if (Fl::e_is_click == Fl::e_keysym)
-                    {
-                        Fl::e_clicks++;
-                    }
-                    else
-                    {
-                        Fl::e_clicks = 0;
-                        Fl::e_is_click = Fl::e_keysym;
-                    }
-                    Fl::handle(FL_PUSH, &window);
-                }
-            break;
-        }
-
+      if (btnp)
+      {
         if (movement)
         {
-            Fl::handle(FL_MOVE, &window);
-            break;
+          Fl::handle(FL_DRAG, &window);
+        }
+      }
+
+      else
+      {
+        if (Fl::e_is_click == Fl::e_keysym)
+        {
+          Fl::e_clicks++;
         }
 
-    }while(0);
+        else
+        {
+          Fl::e_clicks = 0;
+          Fl::e_is_click = Fl::e_keysym;
+        }
+
+        Fl::handle(FL_PUSH, &window);
+      }
+
+      break;
+    }
+
+    if (movement)
+    {
+      Fl::handle(FL_MOVE, &window);
+      break;
+    }
+
+  }
+  while (0);
 
   return;
+}
+
+int
+Fl_PM_Screen_Driver::wait_mouse(Fl_Window& window)
+{
+  int rc;
+  struct mouse_event mouse;
+  int col;
+  int row;
+
+  do
+  {
+
+    rc = mouse_get_event(&mouse);
+
+    if (0 == rc)
+    {
+      break;
+    }
+
+    mouse.m_curs_col = (mouse.m_curs_col >> 3);
+    mouse.m_curs_row = (mouse.m_curs_row >> 3);
+
+    if (mouse.m_btn_state &&
+        (FL_WINDOW == window.type() ||
+         FL_DOUBLE_WINDOW == window.type()))
+    {
+      wm::hit_type what = wm_.hit(window, mouse.m_curs_col, mouse.m_curs_row);
+
+      if (wm::HIT_NONE != what && wm::HIT_WINDOW != what)
+      {
+        wm_.handle_push(window, what, mouse.m_curs_col, mouse.m_curs_row);
+        break;
+      }
+    }
+
+    event_mouse(window, mouse);
+
+    if (prev_.m_btn_state)
+    {
+      if (1 & prev_.m_btn_state)
+      {
+        Fl::e_state |= FL_BUTTON1;
+        Fl::e_keysym = (FL_Button | FL_LEFT_MOUSE);
+      }
+
+      if (2 & prev_.m_btn_state)
+      {
+        Fl::e_state |= FL_BUTTON2;
+        Fl::e_keysym = (FL_Button | FL_RIGHT_MOUSE);
+      }
+
+      Fl::handle(FL_RELEASE, &window);
+      prev_.m_curs_col = 0;
+      prev_.m_curs_row = 0;
+      prev_.m_btn_state = 0;
+      break;
+    }
+
+  }
+  while (0);
+
+  return rc;
 }
 
 double
@@ -656,47 +791,24 @@ Fl_PM_Screen_Driver::wait(double time_to_wait)
       window->take_focus();
     }
 
-    rc= keyboard_query();
+    rc = keyboard_query();
 
     if (rc)
     {
-        unsigned char ascii;
-        unsigned char scan;
-        keyboard_read(&scan, &ascii);
-        event_key((*window), scan, ascii);
-        break;
+      unsigned char ascii;
+      unsigned char scan;
+      keyboard_read(&scan, &ascii);
+      event_key((*window), scan, ascii);
+      break;
     }
 
-    struct mouse_event mouse;
-
-    rc= mouse_get_event(&mouse);
+    rc = wait_mouse((*window));
 
     if (rc)
     {
-        event_mouse((*window), mouse);
-        break;
+      break;
     }
 
-    if (prev_.m_btn_state)
-    {
-        if (1 & prev_.m_btn_state)
-        {
-            Fl::e_state |= FL_BUTTON1;
-            Fl::e_keysym = (FL_Button | FL_LEFT_MOUSE);
-        }
-
-        if (2 & prev_.m_btn_state)
-        {
-            Fl::e_state |= FL_BUTTON2;
-            Fl::e_keysym = (FL_Button | FL_RIGHT_MOUSE);
-        }
-
-        Fl::handle(FL_RELEASE, window);
-        prev_.m_curs_col= 0;
-        prev_.m_curs_row= 0;
-        prev_.m_btn_state= 0;
-        break;
-    }
 
   }
   while (0);
@@ -713,27 +825,29 @@ Fl_PM_Screen_Driver::ready()
 void
 Fl_PM_Screen_Driver::grab(Fl_Window* win)
 {
-    if (win)
-    {
-        Fl::grab_= win;
-    }
-    else
-    {
-        Fl::grab_= 0;
-        fl_fix_focus();
-    }
+  if (win)
+  {
+    Fl::grab_ = win;
+  }
+
+  else
+  {
+    Fl::grab_ = 0;
+    fl_fix_focus();
+  }
+
   return;
 }
 
 void
 Fl_PM_Screen_Driver::add_timeout(double time, Fl_Timeout_Handler cb,
-                                     void* argp)
+                                 void* argp)
 {
 }
 
 void
 Fl_PM_Screen_Driver::repeat_timeout(double time, Fl_Timeout_Handler cb,
-                                        void* argp)
+                                    void* argp)
 {
 }
 

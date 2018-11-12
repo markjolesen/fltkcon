@@ -72,6 +72,9 @@
 #include "fl_skin.h"
 #include "screen.h"
 
+extern "C" void mouse_show();
+extern "C" void mouse_hide();
+
 inline static enum foreground
 _FG(enum Fl::foreground const fcolor)
 {
@@ -537,4 +540,30 @@ Fl_Graphics_Driver::draw_frame(
   draw_putc(l_right, l_bottom, Fl::_skin_sym.bottom_right, 1, i_fcolor, i_bcolor);
 
   return;
+}
+
+void
+Fl_Graphics_Driver::flip_to_offscreen(bool i_copy) const
+{
+    screen_push(i_copy);
+}
+
+void
+Fl_Graphics_Driver::flip_to_onscreen() const
+{
+    screen_pop();
+}
+
+void
+Fl_Graphics_Driver::mouse_hide()
+{
+    ::mouse_hide();
+    return;
+}
+
+void
+Fl_Graphics_Driver::mouse_show()
+{
+    ::mouse_show();
+    return;
 }

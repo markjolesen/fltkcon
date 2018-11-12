@@ -30,7 +30,7 @@ UDATA_BYTES EQU $ - queue
 .DATA
 
 PUBLIC _mouse_initialized
-_mouse_initialized dd 0 ; indicator if mouse is enabled
+_mouse_initialized dw 0 ; indicator if mouse is enabled
 
 .CODE
 
@@ -261,7 +261,7 @@ mouse_init_ PROC
     push edi
     push es
     
-    mov [dword ptr _mouse_initialized], 0
+    mov [word ptr _mouse_initialized], 0
     mov [dword ptr qstart], 0
     mov [dword ptr qend], 0
     mov [dword ptr qactive], 0
@@ -310,7 +310,7 @@ mouse_init_ PROC
     mov ax, 0ch
     int 33h
     
-    mov [dword ptr _mouse_initialized], 1
+    mov [word ptr _mouse_initialized], 1
     xor eax, eax
    
 iniexit:
@@ -331,9 +331,37 @@ mouse_deinit_ PROC
     ; int 33h 00h mouse installed flag and reset
     xor ax, ax
     int 033h
-    mov [dword ptr _mouse_initialized], 0
+    mov [word ptr _mouse_initialized], 0
     ret
 
 mouse_deinit_ ENDP
+
+public mouse_hide_
+mouse_hide_ PROC
+
+    mov ax, [word ptr _mouse_initialized]
+    or ax, ax
+    jz mouse_hide_exit
+    mov ax, 02h
+    int 033h
+    
+mouse_hide_exit:
+
+    ret
+mouse_hide_ ENDP
+
+public mouse_show_
+mouse_show_ PROC
+
+    mov ax, [word ptr _mouse_initialized]
+    or ax, ax
+    jz mouse_show_exit
+    mov ax, 01h
+    int 033h
+
+mouse_show_exit:    
+
+    ret
+mouse_show_ ENDP
 
 END

@@ -265,6 +265,9 @@ Fl_PM_Window_Driver::show_menu()
 void
 Fl_PM_Window_Driver::resize(int X, int Y, int W, int H)
 {
+
+  pWindow->Fl_Group::resize(X, Y, W, H);
+
   return;
 }
 

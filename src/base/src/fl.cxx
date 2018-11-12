@@ -66,18 +66,18 @@
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
 //
-
-#include "fl.h"
-#include "platform.h"
-#include "drvscr.h"
-#include "drvwin.h"
-#include "drvsys.h"
-#include "win.h"
-#include "fl_draw.h"
-#include "fl_abi.h"
-
 #include <ctype.h>
 #include <stdlib.h>
+#include "fl.h"
+#include "drvgr.h"
+#include "drvwin.h"
+#include "drvscr.h"
+#include "drvsys.h"
+#include "fl_draw.h"
+#include "fl_abi.h"
+#include "platform.h"
+#include "win.h"
+
 #include "flstring.h"
 
 #if defined(DEBUG) || defined(DEBUG_WATCH)
@@ -717,7 +717,21 @@ Fl::first_window(Fl_Window* window)
 void
 Fl::redraw()
 {
+  int x, y, w, h;
+
+  gr().mouse_hide();
+  gr().flip_to_offscreen(false);
+
+  Fl::screen_work_area(x, y, w, h, 0);
+
+  Fl::draw_fill(x, y, w, h, 0x20, Fl::fcolor_white, Fl::bcolor_black);
+
   for (Fl_X* i = Fl_X::first; i; i = i->next) i->w->redraw();
+
+  gr().flip_to_onscreen();
+  gr().mouse_show();
+
+  return;
 }
 
 /**

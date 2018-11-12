@@ -57,6 +57,25 @@ block_length(
   return l_size;
 }
 
+static unsigned int
+block_length_frame()
+{
+  unsigned int l_size;
+
+  if (_video_cols > _video_rows)
+  {
+      l_size= _video_cols;
+  }
+  else
+  {
+      l_size= _video_rows;
+  }
+
+  l_size*= (4 * sizeof(screen_block_t));
+
+  return l_size;
+}
+
 static void
 block_screen_read(
   struct block* const io_block)
@@ -118,14 +137,77 @@ block_read(
   return;
 }
 
+static void
+block_screen_read_frame(
+  struct block* const io_block)
+{
+  screen_block_t* l_next;
+
+  l_next= screen_read(
+    (*io_block).m_data,
+    (*io_block).m_len_x,
+    (*io_block).m_pos_x,
+    (*io_block).m_pos_y);
+
+  l_next= screen_read(
+    l_next,
+    (*io_block).m_len_x,
+    (*io_block).m_pos_x,
+    ((*io_block).m_pos_y + (*io_block).m_len_y - 1));
+
+  l_next= screen_readv(
+    l_next,
+    (*io_block).m_len_y - 2,
+    (*io_block).m_pos_x,
+    (*io_block).m_pos_y + 1);
+
+  l_next= screen_readv(
+    l_next,
+    (*io_block).m_len_y - 2,
+    ((*io_block).m_pos_x + (*io_block).m_len_x - 1),
+    (*io_block).m_pos_y + 1);
+
+  return;
+}
+
+extern void
+block_read_frame(
+  struct block* const io_block,
+  int const i_pos_x,
+  int const i_pos_y,
+  unsigned int const i_len_x,
+  unsigned int const i_len_y)
+{
+  unsigned int l_size;
+  void* l_block;
+
+  l_size = block_length_frame();
+
+  if ((*io_block).m_alloc_size < l_size)
+  {
+    l_block = realloc((*io_block).m_data, l_size);
+    (*io_block).m_data = l_block;
+    (*io_block).m_alloc_size = l_size;
+  }
+
+  (*io_block).m_pos_x = i_pos_x;
+  (*io_block).m_pos_y = i_pos_y;
+  (*io_block).m_len_x = i_len_x;
+  (*io_block).m_len_y = i_len_y;
+
+  block_screen_read_frame(io_block);
+
+  return;
+}
+
 extern void
 block_write(
   struct block const* const i_block)
 {
-  unsigned int                        l_len_x;
-  screen_block_t const __FAR*         l_next;
-  int                                 l_pos_y;
-  unsigned int                        l_row;
+  unsigned int l_len_x;
+  screen_block_t const __FAR* l_next;
+  int l_pos_y;
+  unsigned int l_row;
 
   l_len_x = (*i_block).m_len_x;
 #if defined(__CURSES__)
@@ -145,6 +227,39 @@ block_write(
 
     l_next = screen_write((*i_block).m_pos_x, l_pos_y, l_next, l_len_x);
   }
+
+  return;
+}
+
+extern void
+block_write_frame(
+  struct block const* const i_block)
+{
+  screen_block_t const __FAR* l_next;
+
+  l_next = screen_write(
+    (*i_block).m_pos_x,
+    (*i_block).m_pos_y,
+    (*i_block).m_data,
+    (*i_block).m_len_x);
+
+  l_next = screen_write(
+    (*i_block).m_pos_x,
+    ((*i_block).m_pos_y + (*i_block).m_len_y - 1),
+    l_next,
+    (*i_block).m_len_x);
+
+  l_next= screen_writev(
+    (*i_block).m_pos_x,
+    (*i_block).m_pos_y + 1,
+    l_next,
+    (*i_block).m_len_y - 2);
+
+  l_next= screen_writev(
+    ((*i_block).m_pos_x + (*i_block).m_len_x - 1),
+    (*i_block).m_pos_y + 1,
+    l_next,
+    (*i_block).m_len_y - 2);
 
   return;
 }
