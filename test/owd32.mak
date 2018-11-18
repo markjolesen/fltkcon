@@ -30,6 +30,7 @@ EXES= &
     tinpfile.exe &
     tinput.exe &
     tmenubar.exe &
+    tscroll.exe &
     ttexted.exe &
     tvaluato.exe
 
@@ -50,8 +51,15 @@ tinput.exe : tinput.obj
 tmenubar.exe : tmenubar.obj
 	*wlink NAME $^@ DEBUG ALL SYSTEM $(SYSTEM) FILE $<, $(FLTKLIB)
 
+tscroll.exe : tscroll.obj
+	*wlink NAME $^@ DEBUG ALL SYSTEM $(SYSTEM) FILE $<, $(FLTKLIB)
+
 ttexted.exe : ttexted.obj
 	*wlink NAME $^@ DEBUG ALL SYSTEM $(SYSTEM) FILE $<, $(FLTKLIB)
 
 tvaluato.exe : tvaluato.obj
 	*wlink NAME $^@ DEBUG ALL SYSTEM $(SYSTEM) FILE $<, $(FLTKLIB)
+
+clean : .SYMBOLIC
+	@rm *.obj
+	@rm *.exe

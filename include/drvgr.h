@@ -105,11 +105,7 @@ class Fl_Graphics_Driver
     static int draw_offset_y;
 
     static Fl_Graphics_Driver&
-    instance()
-    {
-      static Fl_Graphics_Driver driver;
-      return driver;
-    }
+    instance();
 
     bool
     clip_intersects(

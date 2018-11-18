@@ -609,11 +609,6 @@ Fl_PM_Screen_Driver::event_mouse(
   int movement = (mouse.m_curs_col - prev_.m_curs_col) +
                  (mouse.m_curs_row - prev_.m_curs_row);
 
-  unsigned short int btnp = prev_.m_btn_state;
-  prev_.m_curs_col = mouse.m_curs_col;
-  prev_.m_curs_row = mouse.m_curs_row;
-  prev_.m_btn_state = mouse.m_btn_state;
-
   if (1 & mouse.m_btn_state)
   {
     Fl::e_state |= FL_BUTTON1;
@@ -631,7 +626,7 @@ Fl_PM_Screen_Driver::event_mouse(
 
     if (3 & mouse.m_btn_state)
     {
-      if (btnp)
+      if (prev_.m_btn_state)
       {
         if (movement)
         {
@@ -673,10 +668,8 @@ Fl_PM_Screen_Driver::event_mouse(
 int
 Fl_PM_Screen_Driver::wait_mouse(Fl_Window& window)
 {
-  int rc;
   struct mouse_event mouse;
-  int col;
-  int row;
+  int rc;
 
   do
   {
@@ -691,16 +684,19 @@ Fl_PM_Screen_Driver::wait_mouse(Fl_Window& window)
     mouse.m_curs_col = (mouse.m_curs_col >> 3);
     mouse.m_curs_row = (mouse.m_curs_row >> 3);
 
-    if (mouse.m_btn_state &&
-        (FL_WINDOW == window.type() ||
-         FL_DOUBLE_WINDOW == window.type()))
+    if (0 == prev_.m_btn_state)
     {
-      wm::hit_type what = wm_.hit(window, mouse.m_curs_col, mouse.m_curs_row);
-
-      if (wm::HIT_NONE != what && wm::HIT_WINDOW != what)
+      if (mouse.m_btn_state &&
+          (FL_WINDOW == window.type() ||
+           FL_DOUBLE_WINDOW == window.type()))
       {
-        wm_.handle_push(window, what, mouse.m_curs_col, mouse.m_curs_row);
-        break;
+        wm::hit_type what = wm_.hit(window, mouse.m_curs_col, mouse.m_curs_row);
+
+        if (wm::HIT_NONE != what && wm::HIT_WINDOW != what)
+        {
+          wm_.handle_push(window, what, mouse.m_curs_col, mouse.m_curs_row);
+          break;
+        }
       }
     }
 
@@ -721,11 +717,11 @@ Fl_PM_Screen_Driver::wait_mouse(Fl_Window& window)
       }
 
       Fl::handle(FL_RELEASE, &window);
-      prev_.m_curs_col = 0;
-      prev_.m_curs_row = 0;
-      prev_.m_btn_state = 0;
-      break;
     }
+
+    prev_.m_curs_col = mouse.m_curs_col;
+    prev_.m_curs_row = mouse.m_curs_row;
+    prev_.m_btn_state = mouse.m_btn_state;
 
   }
   while (0);
@@ -808,7 +804,6 @@ Fl_PM_Screen_Driver::wait(double time_to_wait)
     {
       break;
     }
-
 
   }
   while (0);

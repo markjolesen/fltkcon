@@ -1,9 +1,10 @@
-// pmdrvwin.h
+// scroll.h
 //
-// Protected Mode Window handling code for the Fast Light Tool Kit (FLTK).
+// Scroll header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2018 The fltkcon authors
 // Copyright 2017-2018 The fltkal authors
+// Copyright 1998-2015 by Bill Spitzak and others.
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -64,70 +65,115 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(FL_PM_WINDOW_DRIVER_H)
+//
+#ifndef Fl_Scroll_H
+#define Fl_Scroll_H
 
-#include "drvwin.h"
-#include "block.h"
+#include "group.h"
+#include "scrlbar.h"
 
-class Fl_PM_Window_Driver : public Fl_Window_Driver
+class Fl_Scroll : public Fl_Group
 {
 
-  public:
-
-    enum
-    {
-      window_min_height = 5,
-      window_min_width = 5
-    };
-
-    Fl_PM_Window_Driver(Fl_Window*);
-
-    virtual ~Fl_PM_Window_Driver();
-
-    virtual int decorated_w();
-
-    virtual int decorated_h();
-
-    virtual void draw_begin();
-
-    virtual void draw_end();
-
-    virtual Fl_X* makeWindow();
-
-    virtual void take_focus();
-
-    virtual void show();
-
-    virtual void hide();
-
-    virtual void erase_menu();
-
-    virtual void show_menu();
-
-    virtual void resize(int X, int Y, int W, int H);
-
-    virtual int scrollto(
+    int xposition_, yposition_;
+    int oldx, oldy;
+    static void hscrollbar_cb(Fl_Widget*, void*);
+    static void scrollbar_cb(Fl_Widget*, void*);
+    void fix_scrollbar_order();
+    static void draw_clip(
+      void* v,
       int const X,
       int const Y,
       unsigned int const W,
       unsigned int const H,
-      int const dx,
-      int const dy,
-      void (*draw_area)(
-        void*,
-        int const,
-        int const,
-        unsigned int const,
-        unsigned int const,
-        enum Fl::foreground const,
-        enum Fl::background const),
-      void* data,
-      struct Fl::skin_widget const& skin);
+      enum Fl::foreground const fcolor,
+      enum Fl::background const bcolor);
 
   protected:
 
-    struct block* block_;
+    typedef struct
+    {
+      typedef struct
+      {
+        int x, y, w, h;
+      } Fl_Region_XYWH;
+      typedef struct
+      {
+        int l;
+        int r;
+        int t;
+        int b;
+      } Fl_Region_LRTB;
+      typedef struct
+      {
+        int x, y, w, h;
+        int pos;
+        int size;
+        int first;
+        int total;
+      } Fl_Scrollbar_Data;
+      int scrollsize;
+      Fl_Region_XYWH innerbox;
+      Fl_Region_XYWH innerchild;
+      Fl_Region_LRTB child;
+      int hneeded;
+      int vneeded;
+      Fl_Scrollbar_Data hscroll;
+      Fl_Scrollbar_Data vscroll;
+    } ScrollInfo;
+    void recalc_scrollbars(ScrollInfo& si);
+
+  protected:
+
+    void bbox(int&, int&, int&, int&);
+    void draw();
+
+  public:
+
+    Fl_Scrollbar scrollbar;
+    Fl_Scrollbar hscrollbar;
+
+    void
+    resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
+
+    bool
+    handle(
+      Fl_Event const);
+
+    Fl_Scroll(
+      int const i_pos_x,
+      int const i_pos_y,
+      unsigned int const i_len_x,
+      unsigned int const i_len_y,
+      unsigned char const* i_label = 0L);
+
+    enum
+    {
+      HORIZONTAL = 1,
+      VERTICAL = 2,
+      BOTH = 3,
+      ALWAYS_ON = 4,
+      HORIZONTAL_ALWAYS = 5,
+      VERTICAL_ALWAYS = 6,
+      BOTH_ALWAYS = 7
+    };
+
+    int
+    xposition() const
+    {
+      return xposition_;
+    }
+    int
+    yposition() const
+    {
+      return yposition_;
+    }
+    void scroll_to(int, int);
+    void clear();
 };
 
-#define FL_PM_WINDOW_DRIVER_H
 #endif

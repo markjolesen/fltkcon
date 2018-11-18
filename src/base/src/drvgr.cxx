@@ -90,6 +90,13 @@ _BG(enum Fl::background const bcolor)
 int Fl_Graphics_Driver::draw_offset_x = 0;
 int Fl_Graphics_Driver::draw_offset_y = 0;
 
+Fl_Graphics_Driver&
+Fl_Graphics_Driver::instance()
+{
+  static Fl_Graphics_Driver driver;
+  return driver;
+}
+
 Fl_Graphics_Driver::Fl_Graphics_Driver() :
   stack_top_(0)
 {
@@ -113,7 +120,7 @@ Fl_Graphics_Driver::clip_intersects(
       break;
     }
 
-    struct region const* l_region = &stack_[stack_top_];
+    struct region const* l_region = &stack_[(stack_top_ - 1)];
 
     if ((*l_region).m_is_empty)
     {
@@ -230,7 +237,7 @@ Fl_Graphics_Driver::clip_box(
       o_pos_x = l_pos_x2;
     }
 
-    if ((o_pos_x + o_len_x) > l_pos_x2)
+    if (o_len_x && ((o_pos_x + o_len_x) > l_pos_x2))
     {
       o_len_x = 1 + (l_pos_x2 - o_pos_x);
     }
@@ -260,7 +267,7 @@ Fl_Graphics_Driver::clip_box(
       o_pos_x = l_pos_x2;
     }
 
-    if ((o_pos_y + o_len_y) > l_pos_y2)
+    if (o_len_y && ((o_pos_y + o_len_y) > l_pos_y2))
     {
       o_len_y = 1 + (l_pos_y2 - o_pos_y);
     }
@@ -545,25 +552,25 @@ Fl_Graphics_Driver::draw_frame(
 void
 Fl_Graphics_Driver::flip_to_offscreen(bool i_copy) const
 {
-    screen_push(i_copy);
+  screen_push(i_copy);
 }
 
 void
 Fl_Graphics_Driver::flip_to_onscreen() const
 {
-    screen_pop();
+  screen_pop();
 }
 
 void
 Fl_Graphics_Driver::mouse_hide()
 {
-    ::mouse_hide();
-    return;
+  ::mouse_hide();
+  return;
 }
 
 void
 Fl_Graphics_Driver::mouse_show()
 {
-    ::mouse_show();
-    return;
+  ::mouse_show();
+  return;
 }

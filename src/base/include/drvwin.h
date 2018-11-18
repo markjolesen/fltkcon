@@ -253,11 +253,27 @@ class Fl_Window_Driver
 
     // --- window printing/drawing helper
     virtual int
-    scrollto(int src_x, int src_y, int src_w, int src_h, int dest_x, int dest_y,
-             void (*draw_area)(void*, int, int, int, int), void* data)
+    scrollto(
+      int const X,
+      int const Y,
+      unsigned int const W,
+      unsigned int const H,
+      int const dx,
+      int const dy,
+      void (*draw_area)(
+        void*,
+        int const,
+        int const,
+        unsigned int const,
+        unsigned int const,
+        enum Fl::foreground const fcolor,
+        enum Fl::background const bcolor),
+      void* data,
+      struct Fl::skin_widget const& skin)
     {
       return 0;
     }
+
     static inline Fl_Window_Driver*
     driver(const Fl_Window* win)
     {

@@ -1,9 +1,9 @@
-// pmdrvwin.h
+// scrlarea.cxx
 //
-// Protected Mode Window handling code for the Fast Light Tool Kit (FLTK).
+// Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2018 The fltkcon authors
 // Copyright 2017-2018 The fltkal authors
+// Copyright 1998-2016 by Bill Spitzak and others.
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -64,70 +64,111 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(FL_PM_WINDOW_DRIVER_H)
-
+//
 #include "drvwin.h"
-#include "block.h"
+#include "fl_rend.h"
 
-class Fl_PM_Window_Driver : public Fl_Window_Driver
+void
+fl_scroll(
+  int const X,
+  int const Y,
+  unsigned int const W,
+  unsigned int const H,
+  int const dx,
+  int const dy,
+  void (*draw_area)(
+    void*,
+    int const,
+    int const,
+    unsigned int const,
+    unsigned int const,
+    enum Fl::foreground const fcolor,
+    enum Fl::background const bcolor),
+  void* data,
+  struct Fl::skin_widget const& skin)
 {
+  if (!dx && !dy) return;
 
-  public:
+  if (dx <= -W || dx >= W || dy <= -H || dy >= H)
+  {
+    draw_area(data, X, Y, W, H, skin.normal_fcolor, skin.normal_bcolor);
+    return;
+  }
 
-    enum
-    {
-      window_min_height = 5,
-      window_min_width = 5
-    };
+  int src_x, src_w, dest_x, clip_x, clip_w;
 
-    Fl_PM_Window_Driver(Fl_Window*);
+  if (dx > 0)
+  {
+    src_x = X;
+    dest_x = X + dx;
+    src_w = W - dx;
+    clip_x = X;
+    clip_w = dx;
+  }
 
-    virtual ~Fl_PM_Window_Driver();
+  else
+  {
+    src_x = X - dx;
+    dest_x = X;
+    src_w = W + dx;
+    clip_x = X + src_w;
+    clip_w = W - src_w;
+  }
 
-    virtual int decorated_w();
+  int src_y, src_h, dest_y, clip_y, clip_h;
 
-    virtual int decorated_h();
+  if (dy > 0)
+  {
+    src_y = Y;
+    dest_y = Y + dy;
+    src_h = H - dy;
+    clip_y = Y;
+    clip_h = dy;
+  }
 
-    virtual void draw_begin();
+  else
+  {
+    src_y = Y - dy;
+    dest_y = Y;
+    src_h = H + dy;
+    clip_y = Y + src_h;
+    clip_h = H - src_h;
+  }
 
-    virtual void draw_end();
+  int retval = Fl_Window_Driver::driver(Fl_Window::current())->scrollto(
+                 src_x,
+                 src_y,
+                 src_w,
+                 src_h,
+                 dest_x,
+                 dest_y,
+                 draw_area,
+                 data,
+                 skin);
 
-    virtual Fl_X* makeWindow();
+  if (retval)
+  {
+    draw_area(data, X, Y, W, H, skin.normal_fcolor, skin.normal_bcolor);
+    return;
+  }
 
-    virtual void take_focus();
+  if (dx) draw_area(
+      data,
+      clip_x,
+      dest_y,
+      clip_w,
+      src_h,
+      skin.normal_fcolor,
+      skin.normal_bcolor);
 
-    virtual void show();
+  if (dy) draw_area(
+      data,
+      X,
+      clip_y,
+      W,
+      clip_h,
+      skin.normal_fcolor,
+      skin.normal_bcolor);
 
-    virtual void hide();
-
-    virtual void erase_menu();
-
-    virtual void show_menu();
-
-    virtual void resize(int X, int Y, int W, int H);
-
-    virtual int scrollto(
-      int const X,
-      int const Y,
-      unsigned int const W,
-      unsigned int const H,
-      int const dx,
-      int const dy,
-      void (*draw_area)(
-        void*,
-        int const,
-        int const,
-        unsigned int const,
-        unsigned int const,
-        enum Fl::foreground const,
-        enum Fl::background const),
-      void* data,
-      struct Fl::skin_widget const& skin);
-
-  protected:
-
-    struct block* block_;
-};
-
-#define FL_PM_WINDOW_DRIVER_H
-#endif
+  return;
+}

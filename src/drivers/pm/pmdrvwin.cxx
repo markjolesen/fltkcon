@@ -64,12 +64,13 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
+#include <string.h>
 #include "pmdrvwin.h"
 #include "drvgr.h"
+#include "block.h"
 #include "fl_draw.h"
 #include "platform.h"
 #include "mouse.h"
-#include <string.h>
 
 Window fl_window = 0;
 
@@ -272,9 +273,37 @@ Fl_PM_Window_Driver::resize(int X, int Y, int W, int H)
 }
 
 int
-Fl_PM_Window_Driver::scrollto(int src_x, int src_y, int src_w, int src_h,
-                              int dest_x, int dest_y, void (*draw_area)(void*, int, int, int, int),
-                              void* data)
+Fl_PM_Window_Driver::scrollto(
+  int const X,
+  int const Y,
+  unsigned int const W,
+  unsigned int const H,
+  int const dx,
+  int const dy,
+  void (*draw_area)(
+    void*,
+    int const,
+    int const,
+    unsigned int const,
+    unsigned int const,
+    enum Fl::foreground const,
+    enum Fl::background const),
+  void* data,
+  struct Fl::skin_widget const& skin)
 {
+  struct block* blk;
+
+  blk = block_new();
+  block_read(
+    blk,
+    (X + Fl_Graphics_Driver::draw_offset_x),
+    (Y + Fl_Graphics_Driver::draw_offset_y),
+    W,
+    H);
+  blk->m_pos_x = (dx + Fl_Graphics_Driver::draw_offset_x);
+  blk->m_pos_y = (dy + Fl_Graphics_Driver::draw_offset_y);
+  block_write(blk);
+  block_free(blk);
+
   return 0;
 }

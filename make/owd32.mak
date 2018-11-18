@@ -167,7 +167,9 @@ FLTKOBJS=&
         $(OBJ)\menu_.obj &
         $(OBJ)\outvalue.obj &
         $(OBJ)\pref.obj &
+        $(OBJ)\scrlarea.obj &
         $(OBJ)\scrlbar.obj &
+        $(OBJ)\scroll.obj &
         $(OBJ)\shortcut.obj &
         $(OBJ)\slider.obj &
         $(OBJ)\slvalue.obj &
@@ -385,8 +387,14 @@ $(OBJ)\outvalue.obj : $(SRC)\outvalue.cxx .AUTODEPEND
 $(OBJ)\pref.obj : $(SRC)\pref.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\pref.cxx
 
+$(OBJ)\scrlarea.obj : $(SRC)\scrlarea.cxx .AUTODEPEND
+        *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\scrlarea.cxx
+
 $(OBJ)\scrlbar.obj : $(SRC)\scrlbar.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\scrlbar.cxx
+
+$(OBJ)\scroll.obj : $(SRC)\scroll.cxx .AUTODEPEND
+        *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\scroll.cxx
 
 $(OBJ)\shortcut.obj : $(SRC)\shortcut.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\shortcut.cxx
@@ -430,8 +438,6 @@ $(OBJ)\winscr.obj : $(SRC)\winscr.cxx .AUTODEPEND
 $(OBJ)\winsngl.obj : $(SRC)\winsngl.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\winsngl.cxx
 
-        
 clean : .SYMBOLIC
         $(RM) $(FLTKLIB)
         $(RM) $(OBJ)\*.obj
-        

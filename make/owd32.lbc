@@ -63,7 +63,9 @@
 -+..\obj\menu_.obj 
 -+..\obj\outvalue.obj 
 -+..\obj\pref.obj 
+-+..\obj\scrlarea.obj 
 -+..\obj\scrlbar.obj 
+-+..\obj\scroll.obj 
 -+..\obj\shortcut.obj 
 -+..\obj\slider.obj 
 -+..\obj\slvalue.obj 

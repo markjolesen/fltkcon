@@ -73,6 +73,7 @@
 #include "fl_color.h"
 #include "fl_draw.h"
 #include "fl_enums.h"
+#include "fl_skin.h"
 
 class Fl_Window;
 
@@ -195,8 +196,24 @@ void fl_draw(
                     enum Fl::background const bcolor),
   int const draw_symbols = 1);
 
-void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
-               void (*draw_area)(void*, int, int, int, int), void* data);
+void fl_scroll(
+  int const X,
+  int const Y,
+  unsigned int const W,
+  unsigned int const H,
+  int const dx,
+  int const dy,
+  void (*draw_area)(
+    void*,
+    int const,
+    int const,
+    unsigned int const,
+    unsigned int const,
+    enum Fl::foreground const fcolor,
+    enum Fl::background const bcolor),
+  void* data,
+  struct Fl::skin_widget const& skin);
+
 const char* fl_shortcut_label(unsigned int shortcut);
 const char* fl_shortcut_label(unsigned int shortcut, const char** eom);
 unsigned int fl_old_shortcut(const char* s);
