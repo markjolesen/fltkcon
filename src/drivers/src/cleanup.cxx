@@ -93,10 +93,10 @@ fl_cleanup::fl_cleanup()
 fl_cleanup::~fl_cleanup()
 {
 
-  Fl_System_Driver* sys= Fl::system_driver();
+  Fl_System_Driver* sys = Fl::system_driver();
   delete sys;
 
-  Fl_Screen_Driver* scr= Fl::screen_driver();
+  Fl_Screen_Driver* scr = Fl::screen_driver();
   delete scr;
 
   return;

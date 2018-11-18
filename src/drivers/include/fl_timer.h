@@ -72,7 +72,7 @@
 class fl_timer
 {
 
-public:
+  public:
 
     fl_timer();
 
@@ -80,39 +80,39 @@ public:
 
     void clear();
 
-    void add(double const seconds, Fl_Timeout_Handler cb, void *arg);
+    void add(double const seconds, Fl_Timeout_Handler cb, void* arg);
 
-    void repeat(double const seconds, Fl_Timeout_Handler cb, void *arg);
+    void repeat(double const seconds, Fl_Timeout_Handler cb, void* arg);
 
-    bool contains(Fl_Timeout_Handler cb, void *arg);
+    bool contains(Fl_Timeout_Handler cb, void* arg);
 
-    void remove(Fl_Timeout_Handler cb, void *arg);
+    void remove(Fl_Timeout_Handler cb, void* arg);
 
-    void elapse(Fl::ticks_t const &elapsed);
+    void elapse(Fl::ticks_t const& elapsed);
 
-protected:
+  protected:
 
     struct slot
     {
-        fl_watch timer;
-        double seconds; // TODO: _mjo remove
-        Fl_Timeout_Handler cb;
-        void *arg;
-        struct slot *next;
+      fl_watch timer;
+      double seconds; // TODO: _mjo remove
+      Fl_Timeout_Handler cb;
+      void* arg;
+      struct slot* next;
     };
 
-    void clear(struct slot *const head);
+    void clear(struct slot* const head);
 
-    void link(double const seconds, Fl_Timeout_Handler cb, void *arg);
+    void link(double const seconds, Fl_Timeout_Handler cb, void* arg);
 
-    struct slot *first_;
-    struct slot *free_;
+    struct slot* first_;
+    struct slot* free_;
 
-private:
+  private:
 
-    fl_timer(fl_timer const &);
+    fl_timer(fl_timer const&);
 
-    fl_timer &operator=(fl_timer const &);
+    fl_timer& operator=(fl_timer const&);
 
 };
 

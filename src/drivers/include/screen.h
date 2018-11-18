@@ -42,22 +42,22 @@ typedef chtype screen_char_t;
 
 enum foreground
 {
-    fcolor_black                        = 0,
-    fcolor_blue                         = 1,
-    fcolor_green                        = 2,
-    fcolor_cyan                         = 3,
-    fcolor_red                          = 4,
-    fcolor_magenta                      = 5,
-    /* fcolor_brown                     = 6, */
-    /* fcolor_light_gray                = 7, */
-    /* fcolor_gray                      = 8, */
-    /* fcolor_light_blue                = 9, */
-    /* fcolor_light_green               = 10, */
-    /* fcolor_light_cyan                = 11, */
-    /* fcolor_light_red                 = 12, */
-    /* fcolor_light_magenta             = 13, */
-    fcolor_yellow                       = 14,
-    fcolor_white                        = 15
+  fcolor_black                        = 0,
+  fcolor_blue                         = 1,
+  fcolor_green                        = 2,
+  fcolor_cyan                         = 3,
+  fcolor_red                          = 4,
+  fcolor_magenta                      = 5,
+  /* fcolor_brown                     = 6, */
+  /* fcolor_light_gray                = 7, */
+  /* fcolor_gray                      = 8, */
+  /* fcolor_light_blue                = 9, */
+  /* fcolor_light_green               = 10, */
+  /* fcolor_light_cyan                = 11, */
+  /* fcolor_light_red                 = 12, */
+  /* fcolor_light_magenta             = 13, */
+  fcolor_yellow                       = 14,
+  fcolor_white                        = 15
 };
 
 #endif /* (defined(__DOS__) || defined(__DJGPP__)) && !defined(__CURSES__) */
@@ -84,14 +84,14 @@ enum foreground
 
 enum foreground
 {
-    fcolor_black                        = FCOLOR_BLACK,
-    fcolor_blue                         = FCOLOR_BLUE,
-    fcolor_green                        = FCOLOR_GREEN,
-    fcolor_cyan                         = FCOLOR_CYAN,
-    fcolor_red                          = FCOLOR_RED,
-    fcolor_magenta                      = FCOLOR_MAGENTA,
-    fcolor_yellow                       = FCOLOR_YELLOW,
-    fcolor_white                        = FCOLOR_WHITE
+  fcolor_black                        = FCOLOR_BLACK,
+  fcolor_blue                         = FCOLOR_BLUE,
+  fcolor_green                        = FCOLOR_GREEN,
+  fcolor_cyan                         = FCOLOR_CYAN,
+  fcolor_red                          = FCOLOR_RED,
+  fcolor_magenta                      = FCOLOR_MAGENTA,
+  fcolor_yellow                       = FCOLOR_YELLOW,
+  fcolor_white                        = FCOLOR_WHITE
 };
 
 #endif /* #if defined(__NT__) && !defined(__CURSES__) */
@@ -100,14 +100,14 @@ enum foreground
 
 enum foreground
 {
-    fcolor_black                        = COLOR_BLACK,
-    fcolor_blue                         = COLOR_BLUE,
-    fcolor_green                        = COLOR_GREEN,
-    fcolor_cyan                         = COLOR_CYAN,
-    fcolor_red                          = COLOR_RED,
-    fcolor_magenta                      = COLOR_MAGENTA,
-    fcolor_yellow                       = COLOR_YELLOW,
-    fcolor_white                        = COLOR_WHITE
+  fcolor_black                        = COLOR_BLACK,
+  fcolor_blue                         = COLOR_BLUE,
+  fcolor_green                        = COLOR_GREEN,
+  fcolor_cyan                         = COLOR_CYAN,
+  fcolor_red                          = COLOR_RED,
+  fcolor_magenta                      = COLOR_MAGENTA,
+  fcolor_yellow                       = COLOR_YELLOW,
+  fcolor_white                        = COLOR_WHITE
 };
 
 #endif /* #if defined(__CURSES__) */
@@ -116,14 +116,14 @@ enum foreground
 
 enum background
 {
-    bcolor_black                        = 0,
-    bcolor_blue                         = 1,
-    bcolor_green                        = 2,
-    bcolor_cyan                         = 3,
-    bcolor_red                          = 4,
-    bcolor_magenta                      = 5,
-    /* bcolor_brown                     = 6, */
-    bcolor_light_gray                   = 7
+  bcolor_black                        = 0,
+  bcolor_blue                         = 1,
+  bcolor_green                        = 2,
+  bcolor_cyan                         = 3,
+  bcolor_red                          = 4,
+  bcolor_magenta                      = 5,
+  /* bcolor_brown                     = 6, */
+  bcolor_light_gray                   = 7
 };
 
 #endif /* (defined(__DOS__) || defined(__DJGPP__)) && !defined(__CURSES__) */
@@ -150,13 +150,13 @@ enum background
 
 enum background
 {
-    bcolor_black                        = BCOLOR_BLACK,
-    bcolor_blue                         = BCOLOR_BLUE,
-    bcolor_green                        = BCOLOR_GREEN,
-    bcolor_cyan                         = BCOLOR_CYAN,
-    bcolor_red                          = BCOLOR_RED,
-    bcolor_magenta                      = BCOLOR_MAGENTA,
-    bcolor_light_gray                   = BCOLOR_WHITE
+  bcolor_black                        = BCOLOR_BLACK,
+  bcolor_blue                         = BCOLOR_BLUE,
+  bcolor_green                        = BCOLOR_GREEN,
+  bcolor_cyan                         = BCOLOR_CYAN,
+  bcolor_red                          = BCOLOR_RED,
+  bcolor_magenta                      = BCOLOR_MAGENTA,
+  bcolor_light_gray                   = BCOLOR_WHITE
 };
 
 #endif /* #if defined(__NT__) && !defined(__CURSES__) */
@@ -165,13 +165,13 @@ enum background
 
 enum background
 {
-    bcolor_black                        = COLOR_BLACK,
-    bcolor_blue                         = COLOR_BLUE,
-    bcolor_green                        = COLOR_GREEN,
-    bcolor_cyan                         = COLOR_CYAN,
-    bcolor_red                          = COLOR_RED,
-    bcolor_magenta                      = COLOR_MAGENTA,
-    bcolor_light_gray                   = COLOR_WHITE
+  bcolor_black                        = COLOR_BLACK,
+  bcolor_blue                         = COLOR_BLUE,
+  bcolor_green                        = COLOR_GREEN,
+  bcolor_cyan                         = COLOR_CYAN,
+  bcolor_red                          = COLOR_RED,
+  bcolor_magenta                      = COLOR_MAGENTA,
+  bcolor_light_gray                   = COLOR_WHITE
 };
 
 #endif /* #if defined(__CURSES__) */
@@ -207,93 +207,93 @@ extern void
 screen_changed_size();
 #endif
 
-extern void 
+extern void
 screen_fill(
-    screen_char_t const                 i_char,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  screen_char_t const                 i_char,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
-extern void 
+extern void
 screen_fill_area(
-    int const                           i_col,
-    int const                           i_row,
-    unsigned int const                  i_columns,
-    unsigned int const                  i_rows,
-    screen_char_t const                 i_char,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  int const                           i_col,
+  int const                           i_row,
+  unsigned int const                  i_columns,
+  unsigned int const                  i_rows,
+  screen_char_t const                 i_char,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
-extern void 
+extern void
 screen_putc(
-    int const                           i_col,
-    int const                           i_row,
-    screen_char_t const                 i_char,
-    unsigned int const                  i_repeat_count,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  int const                           i_col,
+  int const                           i_row,
+  screen_char_t const                 i_char,
+  unsigned int const                  i_repeat_count,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
-extern void 
+extern void
 screen_putvc(
-    int const                           i_col,
-    int const                           i_row,
-    screen_char_t const                 i_char,
-    unsigned int const                  i_repeat_count,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  int const                           i_col,
+  int const                           i_row,
+  screen_char_t const                 i_char,
+  unsigned int const                  i_repeat_count,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
-extern void 
+extern void
 screen_puts(
-    int const                           i_col,
-    int const                           i_row,
-    unsigned char const __FAR*          i_string,
-    unsigned int const                  i_length,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  int const                           i_col,
+  int const                           i_row,
+  unsigned char const __FAR*          i_string,
+  unsigned int const                  i_length,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
-extern void 
+extern void
 screen_set_color(
-    int const                           i_col,
-    int const                           i_row,
-    unsigned int const                  i_repeat_count,
-    enum foreground const               i_fcolor,
-    enum background const               i_bcolor);
+  int const                           i_col,
+  int const                           i_row,
+  unsigned int const                  i_repeat_count,
+  enum foreground const               i_fcolor,
+  enum background const               i_bcolor);
 
 extern screen_block_t
 screen_getc(
-    int const                           i_col,
-    int const                           i_row);
+  int const                           i_col,
+  int const                           i_row);
 
 extern screen_block_t __FAR*
 screen_read(
-    screen_block_t __FAR*               o_block,
-    unsigned int const                  i_columns,
-    int const                           i_col,
-    int const                           i_row);
+  screen_block_t __FAR*               o_block,
+  unsigned int const                  i_columns,
+  int const                           i_col,
+  int const                           i_row);
 
 extern screen_block_t __FAR*
 screen_readv(
-    screen_block_t __FAR*               o_block,
-    unsigned int const                  i_rows,
-    int const                           i_col,
-    int const                           i_row);
+  screen_block_t __FAR*               o_block,
+  unsigned int const                  i_rows,
+  int const                           i_col,
+  int const                           i_row);
 
 extern screen_block_t const __FAR*
 screen_write(
-    int const                           i_col,
-    int const                           i_row,
-    screen_block_t const __FAR*         i_block,
-    unsigned int const                  i_columns);
+  int const                           i_col,
+  int const                           i_row,
+  screen_block_t const __FAR*         i_block,
+  unsigned int const                  i_columns);
 
 extern screen_block_t const __FAR*
 screen_writev(
-    int const                           i_col,
-    int const                           i_row,
-    screen_block_t const __FAR*         i_block,
-    unsigned int const                  i_rows);
+  int const                           i_col,
+  int const                           i_row,
+  screen_block_t const __FAR*         i_block,
+  unsigned int const                  i_rows);
 
 extern void
 screen_push(
-    int const                           i_copy);
+  int const                           i_copy);
 
 extern void
 screen_pop();

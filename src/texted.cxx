@@ -829,14 +829,14 @@ Fl_Text_Editor::handle(
 
       break;
 
-    case FL_DND_ENTER: 
+    case FL_DND_ENTER:
       if (Fl::visible_focus() && handle(FL_FOCUS))
         Fl::focus(this);
 
       show_cursor(mCursorOn);
       dndCursorPos = insert_position();
 
-    case FL_DND_DRAG: 
+    case FL_DND_DRAG:
       insert_position(xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS));
       return 1;
 

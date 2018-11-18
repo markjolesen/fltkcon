@@ -202,7 +202,7 @@ fl_old_shortcut(const unsigned char* s)
   if (!s || !*s) return 0;
 
   if (s[1] == 0
-      && strchr("@!", s[0])) return (unsigned int)s[0]; 
+      && strchr("@!", s[0])) return (unsigned int)s[0];
 
   unsigned int n = 0;
 

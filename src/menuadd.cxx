@@ -273,7 +273,7 @@ Fl_Menu_::insert(
     {
       delete[] local_array;
 
-      if (!alloc) copy(menu_); 
+      if (!alloc) copy(menu_);
 
       local_array_alloc = local_array_size = size();
       local_array = menu_;
@@ -281,7 +281,7 @@ Fl_Menu_::insert(
 
     else
     {
-      alloc = 2; 
+      alloc = 2;
 
       if (local_array)
       {

@@ -163,7 +163,7 @@ navkey()
 
   switch (Fl::event_key())
   {
-    case 0: 
+    case 0:
       break;
 
     case FL_Tab:
@@ -509,8 +509,8 @@ Fl_Group::Fl_Group(
   array_ = 0;
   savedfocus_ = 0;
   resizable_ = this;
-  bounds_ = 0; 
-  sizes_ = 0; 
+  bounds_ = 0;
+  sizes_ = 0;
   begin();
 }
 
@@ -523,7 +523,7 @@ Fl_Group::clear()
 
   Fl_Widget* pushed = Fl::pushed();
 
-  if (contains(pushed)) pushed = this; 
+  if (contains(pushed)) pushed = this;
 
   Fl::pushed(this);
 
@@ -550,7 +550,7 @@ Fl_Group::clear()
     int idx = children_ - 1;
     Fl_Widget* w = child(idx);
 
-    if (w->parent() == this) 
+    if (w->parent() == this)
     {
       if (children_ > 2)
       {
@@ -711,7 +711,7 @@ Fl_Group::bounds()
     else
       p[0] = Fl_Rect(this);
 
-    int left   = p->x(); 
+    int left   = p->x();
     int top    = p->y();
     int right  = p->r();
     int bottom = p->b();
@@ -741,7 +741,7 @@ Fl_Group::resize(
   int dw = W - w();
   int dh = H - h();
 
-  Fl_Rect* p = bounds(); 
+  Fl_Rect* p = bounds();
 
   Fl_Widget::resize(X, Y, W, H);
 

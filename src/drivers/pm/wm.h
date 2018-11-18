@@ -98,7 +98,7 @@ class wm
 
   protected:
 
-    void handle_push(Fl_Window &window, hit_type const what) const;
+    void handle_push(Fl_Window& window, hit_type const what) const;
 
   private:
 

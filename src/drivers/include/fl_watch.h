@@ -71,7 +71,7 @@
 class fl_watch
 {
 
-public:
+  public:
 
     fl_watch();
 
@@ -83,70 +83,78 @@ public:
 
     void reset();
 
-    void elapse(Fl::ticks_t const &elapsed);
+    void elapse(Fl::ticks_t const& elapsed);
 
-protected:
+  protected:
 
     bool expired_;
     Fl::ticks_t expiry_;
     Fl::ticks_t current_;
 
-private:
+  private:
 
-    fl_watch(fl_watch const &);
+    fl_watch(fl_watch const&);
 
-    fl_watch &operator=(fl_watch const &);
+    fl_watch& operator=(fl_watch const&);
 
 };
 
-inline fl_watch::fl_watch() :
-    expired_(true),
-    expiry_(),
-    current_()
+inline
+fl_watch::fl_watch() :
+  expired_(true),
+  expiry_(),
+  current_()
 {
-    return;
+  return;
 }
 
-inline fl_watch::~fl_watch()
+inline
+fl_watch::~fl_watch()
 {
-    return;
+  return;
 }
 
-inline void fl_watch::set(double const seconds)
+inline void
+fl_watch::set(double const seconds)
 {
-    if (seconds > 0)
-    {
-        expired_ = false;
-        Fl::ticks_convert(expiry_, seconds);
-    }
-    else
-    {
-        expired_ = true;
-        Fl::ticks_convert(expiry_, 0);
-    }
-    current_ = expiry_;
-}
-
-inline void fl_watch::reset()
-{
-    current_ = expiry_;
+  if (seconds > 0)
+  {
     expired_ = false;
+    Fl::ticks_convert(expiry_, seconds);
+  }
+
+  else
+  {
+    expired_ = true;
+    Fl::ticks_convert(expiry_, 0);
+  }
+
+  current_ = expiry_;
 }
 
-inline bool fl_watch::expired() const
+inline void
+fl_watch::reset()
 {
-    return expired_;
+  current_ = expiry_;
+  expired_ = false;
 }
 
-inline void fl_watch::elapse(Fl::ticks_t const &elapsed)
+inline bool
+fl_watch::expired() const
+{
+  return expired_;
+}
+
+inline void
+fl_watch::elapse(Fl::ticks_t const& elapsed)
 {
 
-    if (false == expired_)
-    {
-	expired_= Fl::ticks_elapse(current_, elapsed);
-    }
+  if (false == expired_)
+  {
+    expired_ = Fl::ticks_elapse(current_, elapsed);
+  }
 
-    return;
+  return;
 }
 
 #define __FL_WATCH_H__

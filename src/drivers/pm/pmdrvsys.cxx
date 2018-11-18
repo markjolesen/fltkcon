@@ -75,12 +75,12 @@ Fl_System_Driver::newSystemDriver()
 }
 
 Fl_PM_System_Driver::Fl_PM_System_Driver() :
-    Fl_System_Driver()
+  Fl_System_Driver()
 {
-    return;
+  return;
 }
 
 Fl_PM_System_Driver::~Fl_PM_System_Driver()
 {
-    return;
+  return;
 }

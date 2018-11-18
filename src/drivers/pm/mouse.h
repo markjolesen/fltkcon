@@ -11,11 +11,11 @@
 
 #pragma pack(push, 1);
 
-struct mouse_event 
+struct mouse_event
 {
-    unsigned short int                  m_btn_state;
-    unsigned short int                  m_curs_col;
-    unsigned short int                  m_curs_row;
+  unsigned short int                  m_btn_state;
+  unsigned short int                  m_curs_col;
+  unsigned short int                  m_curs_row;
 };
 
 #pragma pack(pop);

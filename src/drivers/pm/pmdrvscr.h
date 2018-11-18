@@ -83,14 +83,14 @@ class Fl_PM_Screen_Driver : public Fl_Screen_Driver
 
     void
     event_key(
-        Fl_Window& window,
-        unsigned char const scan,
-        unsigned char const ascii) const;
+      Fl_Window& window,
+      unsigned char const scan,
+      unsigned char const ascii) const;
 
     void
     event_mouse(
-        Fl_Window& window,
-        struct mouse_event const& mouse);
+      Fl_Window& window,
+      struct mouse_event const& mouse);
 
     int
     wait_mouse(Fl_Window& window);

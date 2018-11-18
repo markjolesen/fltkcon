@@ -852,7 +852,7 @@ Fl_Text_Display::position_to_xy( int pos, int* X, int* Y ) const
       (pos > mLastChar && !empty_vlines()) ||
       (pos > buffer()->length()) )      // STR #3231
   {
-    return (*X = *Y = 0); 
+    return (*X = *Y = 0);
   }
 
   if (!position_to_line(pos, &visLineNum) || visLineNum < 0
@@ -1642,7 +1642,8 @@ Fl_Text_Display::handle_vline(
       if (prevChar == '\t')
       {
         double tab = col_to_x(mBuffer->tab_distance());
-        double xAbs = (mode == GET_WIDTH) ? startX : startX + mHorizOffset - text_area.x;
+        double xAbs = (mode == GET_WIDTH) ? startX : startX + mHorizOffset -
+                      text_area.x;
         w = ((int(xAbs / tab) + 1) * tab) - xAbs;
 
         if (mode == DRAW_LINE)
@@ -1719,7 +1720,8 @@ Fl_Text_Display::handle_vline(
 
     if (mode == FIND_INDEX)
     {
-      int di = find_x(lineStr + startIndex, i - startIndex, style, -(rightClip - startX)); 
+      int di = find_x(lineStr + startIndex, i - startIndex, style,
+                      -(rightClip - startX));
       free(lineStr);
       IS_UTF8_ALIGNED2(buffer(), (lineStartPos + startIndex + di))
       return lineStartPos + startIndex + di;
@@ -1750,7 +1752,7 @@ Fl_Text_Display::find_x(const unsigned char* s, int len, int style, int x) const
 {
   IS_UTF8_ALIGNED(s)
 
-  int cursor_pos = x < 0; 
+  int cursor_pos = x < 0;
   x = x < 0 ? -x : x;
 
   int i = 0;
@@ -1970,7 +1972,7 @@ Fl_Text_Display::xy_to_position( int X, int Y, int posType ) const
 
   lineLen = vline_length( visLineNum );
 
-  int mode = (posType == CURSOR_POS) ? FIND_CURSOR_INDEX : FIND_INDEX; 
+  int mode = (posType == CURSOR_POS) ? FIND_CURSOR_INDEX : FIND_INDEX;
   return handle_vline(mode,
                       lineStart, lineLen, 0, 0,
                       0, 0,

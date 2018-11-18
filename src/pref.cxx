@@ -832,7 +832,7 @@ Fl_Preferences::RootNode::write()
 char
 Fl_Preferences::RootNode::getPath( char* path, int pathlen )
 {
-  if (!filename_) 
+  if (!filename_)
     return 1;
 
   if (pathlen <= 0)
@@ -851,7 +851,7 @@ Fl_Preferences::RootNode::getPath( char* path, int pathlen )
   name = strrchr( path, '/' );
 
   if (name)
-    name++; 
+    name++;
 
   else
     name = path;

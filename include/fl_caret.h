@@ -108,7 +108,7 @@ namespace Fl
   caret_underline()
   {
     __caret_set_type(0x06, 0x07);
-    _caret_mode= CARET_INSERT;
+    _caret_mode = CARET_INSERT;
     _caret_is_visible = true;
   }
 
@@ -116,7 +116,7 @@ namespace Fl
   caret_block()
   {
     __caret_set_type(0x00, 0x07);
-    _caret_mode= CARET_OVERWRITE;
+    _caret_mode = CARET_OVERWRITE;
     _caret_is_visible = true;
   }
 

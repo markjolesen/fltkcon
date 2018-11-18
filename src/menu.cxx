@@ -582,7 +582,7 @@ menuwindow::drawentry(
   if (m->submenu())
   {
     Fl::draw_putc((xx + ww - 2), yy, Fl::_skin_sym.right, 1,
-        Fl_Widget::skin_.menu_fcolor, Fl_Widget::skin_.menu_bcolor);
+                  Fl_Widget::skin_.menu_fcolor, Fl_Widget::skin_.menu_bcolor);
   }
 
   else if (m->shortcut_)

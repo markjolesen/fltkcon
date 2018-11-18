@@ -227,7 +227,7 @@ Fl_Widget::~Fl_Widget()
 
   if (parent_) parent_->remove(this);
 
-  parent_ = 0; 
+  parent_ = 0;
   fl_throw_focus(this);
 
   if (callback_ == default_callback) cleanup_readqueue(this);

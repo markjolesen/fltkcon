@@ -165,6 +165,8 @@ Fl_Button::draw()
 
   snprintf((char*)text, sizeof(text), "%s%s", (char*)ind, (char*)label_.value);
 
+  Fl::draw_fill(x_, y_, w_, h_, 0x20, l_fcolor, l_bcolor);
+
   Fl_Label::draw(x_, y_, w_, h_, text, label_.align_,
                  l_fcolor, l_bcolor, l_fcolor);
 

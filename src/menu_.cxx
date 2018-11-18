@@ -366,7 +366,7 @@ Fl_Menu_::setonly(Fl_Menu_Item* item)
 
   for (j = item; ; )
   {
-    if (j->flags & FL_MENU_DIVIDER) break; 
+    if (j->flags & FL_MENU_DIVIDER) break;
 
     j++;
 

@@ -64,14 +64,15 @@ block_length_frame()
 
   if (_video_cols > _video_rows)
   {
-      l_size= _video_cols;
-  }
-  else
-  {
-      l_size= _video_rows;
+    l_size = _video_cols;
   }
 
-  l_size*= (4 * sizeof(screen_block_t));
+  else
+  {
+    l_size = _video_rows;
+  }
+
+  l_size *= (4 * sizeof(screen_block_t));
 
   return l_size;
 }
@@ -143,29 +144,29 @@ block_screen_read_frame(
 {
   screen_block_t* l_next;
 
-  l_next= screen_read(
-    (*io_block).m_data,
-    (*io_block).m_len_x,
-    (*io_block).m_pos_x,
-    (*io_block).m_pos_y);
+  l_next = screen_read(
+             (*io_block).m_data,
+             (*io_block).m_len_x,
+             (*io_block).m_pos_x,
+             (*io_block).m_pos_y);
 
-  l_next= screen_read(
-    l_next,
-    (*io_block).m_len_x,
-    (*io_block).m_pos_x,
-    ((*io_block).m_pos_y + (*io_block).m_len_y - 1));
+  l_next = screen_read(
+             l_next,
+             (*io_block).m_len_x,
+             (*io_block).m_pos_x,
+             ((*io_block).m_pos_y + (*io_block).m_len_y - 1));
 
-  l_next= screen_readv(
-    l_next,
-    (*io_block).m_len_y - 2,
-    (*io_block).m_pos_x,
-    (*io_block).m_pos_y + 1);
+  l_next = screen_readv(
+             l_next,
+             (*io_block).m_len_y - 2,
+             (*io_block).m_pos_x,
+             (*io_block).m_pos_y + 1);
 
-  l_next= screen_readv(
-    l_next,
-    (*io_block).m_len_y - 2,
-    ((*io_block).m_pos_x + (*io_block).m_len_x - 1),
-    (*io_block).m_pos_y + 1);
+  l_next = screen_readv(
+             l_next,
+             (*io_block).m_len_y - 2,
+             ((*io_block).m_pos_x + (*io_block).m_len_x - 1),
+             (*io_block).m_pos_y + 1);
 
   return;
 }
@@ -238,28 +239,28 @@ block_write_frame(
   screen_block_t const __FAR* l_next;
 
   l_next = screen_write(
-    (*i_block).m_pos_x,
-    (*i_block).m_pos_y,
-    (*i_block).m_data,
-    (*i_block).m_len_x);
+             (*i_block).m_pos_x,
+             (*i_block).m_pos_y,
+             (*i_block).m_data,
+             (*i_block).m_len_x);
 
   l_next = screen_write(
-    (*i_block).m_pos_x,
-    ((*i_block).m_pos_y + (*i_block).m_len_y - 1),
-    l_next,
-    (*i_block).m_len_x);
+             (*i_block).m_pos_x,
+             ((*i_block).m_pos_y + (*i_block).m_len_y - 1),
+             l_next,
+             (*i_block).m_len_x);
 
-  l_next= screen_writev(
-    (*i_block).m_pos_x,
-    (*i_block).m_pos_y + 1,
-    l_next,
-    (*i_block).m_len_y - 2);
+  l_next = screen_writev(
+             (*i_block).m_pos_x,
+             (*i_block).m_pos_y + 1,
+             l_next,
+             (*i_block).m_len_y - 2);
 
-  l_next= screen_writev(
-    ((*i_block).m_pos_x + (*i_block).m_len_x - 1),
-    (*i_block).m_pos_y + 1,
-    l_next,
-    (*i_block).m_len_y - 2);
+  l_next = screen_writev(
+             ((*i_block).m_pos_x + (*i_block).m_len_x - 1),
+             (*i_block).m_pos_y + 1,
+             l_next,
+             (*i_block).m_len_y - 2);
 
   return;
 }

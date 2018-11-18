@@ -1728,7 +1728,7 @@ utf8_input_filter(unsigned char*
       {
         memmove(line, p, endline - p);
         endline -= (p - line);
-        return (int) (q - buffer); 
+        return (int) (q - buffer);
       }
 
       memcpy(q, multibyte, lq);

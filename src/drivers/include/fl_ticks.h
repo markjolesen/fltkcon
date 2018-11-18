@@ -76,89 +76,100 @@ namespace Fl
 {
 
 #if defined(__DOS__)
-typedef double ticks_t;
+  typedef double ticks_t;
 #else
-typedef struct timespec ticks_t;
+  typedef struct timespec ticks_t;
 #endif
 
-inline void ticks_set(ticks_t &ticks)
-{
+  inline void
+  ticks_set(ticks_t& ticks)
+  {
 #if defined(__DOS__)
     struct dostime_t spec;
     _dos_gettime(&spec);
-    ticks= ((double)spec.hour * 3600.0);
-    ticks+= ((double)spec.minute * 60.0);
-    ticks+= ((double)spec.second);
-    ticks+= ((double)spec.hsecond * 0.01);
+    ticks = ((double)spec.hour * 3600.0);
+    ticks += ((double)spec.minute * 60.0);
+    ticks += ((double)spec.second);
+    ticks += ((double)spec.hsecond * 0.01);
 #else
     clock_gettime(CLOCK_REALTIME, &ticks);
 #endif
     return;
-}
+  }
 
-inline void ticks_convert(ticks_t &ticks, double const seconds)
-{
+  inline void
+  ticks_convert(ticks_t& ticks, double const seconds)
+  {
 #if defined(__DOS__)
-    ticks= seconds;
+    ticks = seconds;
 #else
+
     if (0 < seconds)
     {
-        double integral;
-        double fract = modf(seconds, &integral);
+      double integral;
+      double fract = modf(seconds, &integral);
 
-        ticks.tv_sec = integral;
-        ticks.tv_nsec = (fract * 1000000000L);
+      ticks.tv_sec = integral;
+      ticks.tv_nsec = (fract * 1000000000L);
     }
+
     else
     {
-        ticks.tv_sec = 0;
-        ticks.tv_nsec = 0;
+      ticks.tv_sec = 0;
+      ticks.tv_nsec = 0;
     }
+
 #endif
 
     return;
-}
+  }
 
-inline void ticks_subtract(ticks_t &result, ticks_t const &begin, ticks_t const &end)
-{
+  inline void
+  ticks_subtract(ticks_t& result, ticks_t const& begin, ticks_t const& end)
+  {
 #if defined(__DOS__)
-    result= (end - begin);
+    result = (end - begin);
 #else
     long sec_diff = (end.tv_sec - begin.tv_sec);
     long nsec_diff = (end.tv_nsec - begin.tv_nsec);
 
     if (0 < nsec_diff)
     {
-        result.tv_sec = sec_diff;
-        result.tv_nsec = nsec_diff;
+      result.tv_sec = sec_diff;
+      result.tv_nsec = nsec_diff;
     }
+
     else
     {
-        result.tv_sec = sec_diff - 1;
-        result.tv_nsec = nsec_diff + 1000000000L;
+      result.tv_sec = sec_diff - 1;
+      result.tv_nsec = nsec_diff + 1000000000L;
     }
+
 #endif
 
     return;
-}
+  }
 
-inline bool ticks_elapse(ticks_t &ticks, ticks_t const &elapsed)
-{
-    bool expired= false;
+  inline bool
+  ticks_elapse(ticks_t& ticks, ticks_t const& elapsed)
+  {
+    bool expired = false;
 #if defined(__DOS__)
-    ticks= ticks - elapsed;
+    ticks = ticks - elapsed;
+
     if (0 > ticks)
     {
-	expired= true;
+      expired = true;
     }
+
 #else
     long sec_diff = (ticks.tv_sec - elapsed.tv_sec);
     long nsec_diff = (ticks.tv_nsec - elapsed.tv_nsec);
 
     if (0 > nsec_diff)
     {
-        sec_diff--;
-        nsec_diff += 1000000000L;
+      sec_diff--;
+      nsec_diff += 1000000000L;
     }
 
     ticks.tv_sec = sec_diff;
@@ -166,12 +177,12 @@ inline bool ticks_elapse(ticks_t &ticks, ticks_t const &elapsed)
 
     if (0 > ticks.tv_sec || 0 > ticks.tv_nsec)
     {
-	expired = true;
+      expired = true;
     }
 
 #endif
     return expired;
-}
+  }
 
 };
 

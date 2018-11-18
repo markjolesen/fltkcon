@@ -642,7 +642,7 @@ Fl_Hor_Slider::Fl_Hor_Slider(int const X, int const Y, unsigned int const W,
 }
 
 Fl_Hor_Fill_Slider::Fl_Hor_Fill_Slider(int const X, int const Y,
-                                       unsigned int const W, unsigned int const H, 
+                                       unsigned int const W, unsigned int const H,
                                        const unsigned char* L)
   : Fl_Slider(X, Y, W, H, L)
 {
@@ -650,7 +650,7 @@ Fl_Hor_Fill_Slider::Fl_Hor_Fill_Slider(int const X, int const Y,
 }
 
 Fl_Hor_Nice_Slider::Fl_Hor_Nice_Slider(int const X, int const Y,
-                                       unsigned int const W, unsigned int const H, 
+                                       unsigned int const W, unsigned int const H,
                                        const unsigned char* L)
   : Fl_Slider(X, Y, W, H, L)
 {

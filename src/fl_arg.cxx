@@ -113,7 +113,7 @@ Fl::arg(int argc, char** argv, int& i)
     return 0;
   }
 
-  s++; 
+  s++;
 
   if (fl_match(s, "iconic"))
   {
@@ -171,7 +171,7 @@ Fl::arg(int argc, char** argv, int& i)
   const char* v = argv[i + 1];
 
   if (i >= argc - 1 || !v)
-    return 0; 
+    return 0;
 
   if (fl_match(s, "geometry"))
   {

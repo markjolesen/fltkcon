@@ -300,7 +300,7 @@ Fl_Counter::handle(
           return 0;
       }
 
-    case FL_FOCUS : 
+    case FL_FOCUS :
       Fl::caret_hide();
 
     case FL_UNFOCUS :
