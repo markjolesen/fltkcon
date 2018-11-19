@@ -93,6 +93,13 @@ class Fl_Window_Driver
     Fl_Window* pWindow;
     void flush_Fl_Window(); // accessor to protected Fl_Window::flush()
   public:
+
+    enum
+    {
+      window_min_height = 5,
+      window_min_width = 5
+    };
+
     Fl_Window_Driver(Fl_Window*);
     virtual ~Fl_Window_Driver();
     static Fl_Window_Driver* newWindowDriver(Fl_Window*);

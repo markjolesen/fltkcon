@@ -121,20 +121,21 @@ XUTF8SRC=$(BASESRC)\xutf8
 
 DRIVERCOMMONOBJS=&
         $(OBJ)\cleanup.obj &
-        $(OBJ)\fl_timer.obj
+        $(OBJ)\fl_caret.obj &
+        $(OBJ)\fl_timer.obj &
+        $(OBJ)\wm.obj 
 
 DRIVERCOMMONSRC=$(SRC)\drivers\src
 
 DRIVEROBJS=&
-        $(OBJ)\fl_caret.obj &
         $(OBJ)\hw.obj &
         $(OBJ)\mouse.obj &
         $(OBJ)\pmdrvscr.obj &
         $(OBJ)\pmdrvsys.obj &
         $(OBJ)\pmdrvwin.obj &
+        $(OBJ)\pmwm.obj &
         $(OBJ)\screen.obj &
-        $(OBJ)\video.obj &
-        $(OBJ)\wm.obj 
+        $(OBJ)\video.obj
 
 DRIVERSRC=$(SRC)\drivers\pm
 
@@ -276,8 +277,11 @@ $(OBJ)\cleanup.obj : $(DRIVERCOMMONSRC)\cleanup.cxx .AUTODEPEND
 $(OBJ)\fl_timer.obj : $(DRIVERCOMMONSRC)\fl_timer.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERCOMMONSRC)\fl_timer.cxx
         
-$(OBJ)\fl_caret.obj : $(DRIVERSRC)\fl_caret.cxx .AUTODEPEND
-        *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERSRC)\fl_caret.cxx
+$(OBJ)\fl_caret.obj : $(DRIVERCOMMONSRC)\fl_caret.cxx .AUTODEPEND
+        *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERCOMMONSRC)\fl_caret.cxx
+
+$(OBJ)\wm.obj : $(DRIVERCOMMONSRC)\wm.cxx .AUTODEPEND
+        *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERCOMMONSRC)\wm.cxx
 
 $(OBJ)\hw.obj : $(DRIVERSRC)\hw.asm 
         *$(AS) $(AFLAGS) -fo=$@ $(DRIVERSRC)\hw.asm
@@ -293,6 +297,9 @@ $(OBJ)\pmdrvsys.obj : $(DRIVERSRC)\pmdrvsys.cxx .AUTODEPEND
 
 $(OBJ)\pmdrvwin.obj : $(DRIVERSRC)\pmdrvwin.cxx .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERSRC)\pmdrvwin.cxx
+	
+$(OBJ)\pmwm.obj : $(DRIVERSRC)\pmwm.cxx .AUTODEPEND
+        *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERSRC)\pmwm.cxx
 
 $(OBJ)\screen.obj : $(DRIVERSRC)\screen.asm 
         *$(AS) $(AFLAGS) -fo=$@ $(DRIVERSRC)\screen.asm
@@ -300,9 +307,6 @@ $(OBJ)\screen.obj : $(DRIVERSRC)\screen.asm
 $(OBJ)\video.obj : $(DRIVERSRC)\video.asm 
         *$(AS) $(AFLAGS) -fo=$@ $(DRIVERSRC)\video.asm
         
-$(OBJ)\wm.obj : $(DRIVERSRC)\wm.cxx .AUTODEPEND
-        *$(CXX) $(CXXFLAGS) -fo=$@ $(DRIVERSRC)\wm.cxx
-	
 $(OBJ)\fl_arg.obj : $(SRC)\fl_arg.cxx  .AUTODEPEND
         *$(CXX) $(CXXFLAGS) -fo=$@ $(SRC)\fl_arg.cxx
 	

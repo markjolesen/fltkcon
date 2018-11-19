@@ -72,7 +72,7 @@
 #include "screen.h"
 #include "fl_skin.h"
 #include "fl_caret.h"
-#include "wm.h"
+#include "pmwm.h"
 
 extern void fl_fix_focus();
 
@@ -694,7 +694,7 @@ Fl_PM_Screen_Driver::wait_mouse(Fl_Window& window)
 
         if (wm::HIT_NONE != what && wm::HIT_WINDOW != what)
         {
-          wm_.handle_push(window, what, mouse.m_curs_col, mouse.m_curs_row);
+          wm_.handle_mouse(window, what, mouse.m_curs_col, mouse.m_curs_row);
           break;
         }
       }

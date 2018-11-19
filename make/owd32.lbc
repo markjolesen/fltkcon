@@ -32,6 +32,7 @@
 -+..\obj\pmdrvscr.obj 
 -+..\obj\pmdrvsys.obj 
 -+..\obj\pmdrvwin.obj 
+-+..\obj\pmwm.obj 
 -+..\obj\screen.obj 
 -+..\obj\video.obj 
 -+..\obj\wm.obj 

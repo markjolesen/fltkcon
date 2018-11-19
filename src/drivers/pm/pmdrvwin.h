@@ -74,12 +74,6 @@ class Fl_PM_Window_Driver : public Fl_Window_Driver
 
   public:
 
-    enum
-    {
-      window_min_height = 5,
-      window_min_width = 5
-    };
-
     Fl_PM_Window_Driver(Fl_Window*);
 
     virtual ~Fl_PM_Window_Driver();

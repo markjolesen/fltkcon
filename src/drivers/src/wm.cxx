@@ -1,4 +1,4 @@
-// wm.h
+// wm.cxx
 //
 // Window manager for the Fast Light Tool Kit (FLTK)
 //
@@ -64,50 +64,151 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__WM_H__)
+#include "wm.h"
+#include "fl.h"
+#include "platform.h"
 
-#include "win.h"
-
-class wm
+wm::wm()
 {
+}
 
-  public:
+wm::~wm()
+{
+}
 
-    wm();
+wm::hit_type
+wm::hit(Fl_Window& window, int const x, int const y) const
+{
+  hit_type what = HIT_NONE;
 
-    virtual ~wm();
+  do
+  {
 
-    enum hit_type
+    int top = window.y() - 1;
+    int left = window.x() - 1;
+    int right = window.x() + window.w();
+    int bottom = window.y() + window.h();
+
+    if (x == left)
     {
-      HIT_NONE = 0,
-      HIT_WINDOW,
-      HIT_MOVE,
-      HIT_EAST,
-      HIT_WEST,
-      HIT_NORTH_EAST,
-      HIT_NORTH_WEST,
-      HIT_SOUTH,
-      HIT_SOUTH_EAST,
-      HIT_SOUTH_WEST
-    };
+      if (y == top)
+      {
+        what = HIT_NORTH_WEST;
+      }
 
-    hit_type hit(Fl_Window& window, int const x, int const y) const;
+      else if (y == bottom)
+      {
+        what = HIT_SOUTH_WEST;
+      }
 
-    bool handle_push(Fl_Window& window, hit_type const what, int const x,
-                     int const y) const;
+      else if (y > top && y < bottom)
+      {
+        what = HIT_WEST;
+      }
 
-  protected:
+      break;
+    }
 
-    void handle_push(Fl_Window& window, hit_type const what) const;
+    if (x == right)
+    {
+      if (y == top)
+      {
+        what = HIT_NORTH_EAST;
+      }
 
-  private:
+      else if (y == bottom)
+      {
+        what = HIT_SOUTH_EAST;
+      }
 
+      else if (y > top && y < bottom)
+      {
+        what = HIT_EAST;
+      }
 
-    wm(wm const&);
+      break;
+    }
 
-    wm& operator=(wm const&);
+    what = HIT_WINDOW;
 
-};
+    if ((x >= left) && (x <= right))
+    {
+      if (y == top)
+      {
+        what = HIT_MOVE;
+      }
 
-#define __WM_H__
-#endif
+      else if (y == bottom)
+      {
+        what = HIT_SOUTH;
+      }
+    }
+
+  }
+  while (0);
+
+  return what;
+}
+
+bool
+wm::handle_mouse(Fl_Window& window, hit_type const what, int const x,
+                int const y) const
+{
+  bool handled = false;
+
+  do
+  {
+
+    if (!(FL_WINDOW == window.type() || FL_DOUBLE_WINDOW == window.type()))
+    {
+      break;
+    }
+
+    if (HIT_WINDOW == what)
+    {
+      break;
+    }
+
+    if (HIT_NONE != what)
+    {
+      if (window.modal() && HIT_MOVE != what)
+      {
+        break;
+      }
+
+      handle_push(window, what);
+      handled = true;
+      break;
+    }
+
+    if (window.modal())
+    {
+      break;
+    }
+
+    Fl_X* i;
+
+    for (Fl_X** pp = &Fl_X::first; (i = *pp); pp = &i->next)
+    {
+      Fl_Window* wi = i->w;
+
+      if (wi != &window)
+      {
+        hit_type what2 =  hit((*wi), x, y);
+
+        if (what2)
+        {
+          *pp = i->next;
+          i->next = Fl_X::first;
+          Fl_X::first = i;
+          wi->take_focus();
+          break;
+        }
+      }
+    }
+
+  }
+  while (0);
+
+  return handled;
+}

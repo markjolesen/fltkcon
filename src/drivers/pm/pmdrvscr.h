@@ -71,14 +71,14 @@
 #include "fl_enums.h"
 #include "fl_timer.h"
 #include "mouse.h"
-#include "wm.h"
+#include "pmwm.h"
 
 class Fl_PM_Screen_Driver : public Fl_Screen_Driver
 {
 
   protected:
 
-    wm wm_;
+    pmwm wm_;
     struct mouse_event prev_;
 
     void
