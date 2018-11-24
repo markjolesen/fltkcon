@@ -178,7 +178,7 @@ namespace Fl
     return;
   }
 
-};
+}
 
 #define __fl_draw_h__
 #endif

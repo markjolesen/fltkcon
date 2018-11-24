@@ -108,6 +108,6 @@ namespace Fl
     return val == abi_version();
   }
 
-};
+}
 
 #endif

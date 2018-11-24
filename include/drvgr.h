@@ -215,6 +215,6 @@ namespace Fl
   }
 
 
-};
+}
 
 #endif // FL_GRAPHICS_DRIVER_H

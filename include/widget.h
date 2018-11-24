@@ -80,7 +80,7 @@ class Fl_Group;
 namespace Fl
 {
   void focus(Fl_Widget*);
-};
+}
 
 typedef void (Fl_Callback )(Fl_Widget*, void*);
 typedef Fl_Callback* Fl_Callback_p;

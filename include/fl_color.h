@@ -48,7 +48,7 @@ namespace Fl
     fcolor_white                        = 15
   };
 
-};
+}
 
 #endif /* (defined(__DOS__) || defined(__DJGPP__)) && !defined(__CURSES__) */
 
@@ -87,7 +87,7 @@ namespace Fl
     fcolor_white                        = FCOLOR_WHITE
   };
 
-};
+}
 
 #endif /* #if defined(__NT__) && !defined(__CURSES__) */
 
@@ -108,7 +108,7 @@ namespace Fl
     fcolor_white                        = COLOR_WHITE
   };
 
-};
+}
 
 #endif /* #if defined(__CURSES__) */
 
@@ -129,7 +129,7 @@ namespace Fl
     bcolor_light_gray                   = 7
   };
 
-};
+}
 
 #endif /* (defined(__DOS__) || defined(__DJGPP__)) && !defined(__CURSES__) */
 
@@ -167,7 +167,7 @@ namespace Fl
     bcolor_light_gray                   = BCOLOR_WHITE
   };
 
-};
+}
 
 #endif /* #if defined(__NT__) && !defined(__CURSES__) */
 
@@ -187,7 +187,7 @@ namespace Fl
     bcolor_light_gray                   = COLOR_WHITE
   };
 
-};
+}
 
 #endif /* #if defined(__CURSES__) */
 

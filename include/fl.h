@@ -582,7 +582,7 @@ namespace Fl
   void watch_widget_pointer(Fl_Widget*& w);
   void release_widget_pointer(Fl_Widget*& w);
   void clear_widget_pointer(Fl_Widget const* w);
-};
+}
 
 class Fl_Widget_Tracker
 {

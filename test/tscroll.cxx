@@ -98,10 +98,10 @@ Drawing::draw()
 {
   static unsigned char* const fltkcon[4] =
   {
-    {(unsigned char*)" ___ _  _____ _  _____ ___  _  _ "},
-    {(unsigned char*)"| __| ||_   _| |/ / __/ _ \\| \\| |"},
-    {(unsigned char*)"| _|| |__| | | ' < (_| (_) | .` |"},
-    {(unsigned char*)"|_| |____|_| |_|\\_\\___\\___/|_|\\_|"},
+    (unsigned char*)" ___ _  _____ _  _____ ___  _  _ ",
+    (unsigned char*)"| __| ||_   _| |/ / __/ _ \\| \\| |",
+    (unsigned char*)"| _|| |__| | | ' < (_| (_) | .` |",
+    (unsigned char*)"|_| |____|_| |_|\\_\\___\\___/|_|\\_|"
   };
 
   Fl_Widget* p = parent();
@@ -165,8 +165,8 @@ main(int argc, char** argv)
 
   Fl_Window window(1, 1, 35, 15);
 
-  Fl_Scroll scroll(0, 0, 34, 14);
-  thescroll = &scroll;
+  Fl_Scroll flscroll(0, 0, 34, 14);
+  thescroll = &flscroll;
 
   int n = 0;
   int y;
@@ -197,12 +197,12 @@ main(int argc, char** argv)
       b->skin_.focused_bcolor = Fl::bcolor_light_gray;
     }
 
-  scroll.end();
+  flscroll.end();
 
   /*
-    window.resizable(scroll);
+    window.resizable(flscroll);
 
-    Fl_Box box(0,300,5*75,window.h()-300); // gray area below the scroll
+    Fl_Box box(0,300,5*75,window.h()-300); // gray area below the flscroll
     box.box(FL_FLAT_BOX);
 
     Fl_Light_Button but1(150, 310, 200, 25, "box");
@@ -211,7 +211,7 @@ main(int argc, char** argv)
     choice.menu(choices);
     choice.value(3);
 
-    Fl_Choice achoice(150, 360, 200, 25, "scrollbar.align():");
+    Fl_Choice achoice(150, 360, 200, 25, "flscrollbar.align():");
     achoice.menu(align_choices);
     achoice.value(3);
   */

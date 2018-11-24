@@ -167,7 +167,6 @@ block_screen_read_frame(
              (*io_block).m_len_y - 2,
              ((*io_block).m_pos_x + (*io_block).m_len_x - 1),
              (*io_block).m_pos_y + 1);
-
   return;
 }
 
@@ -206,7 +205,7 @@ block_write(
   struct block const* const i_block)
 {
   unsigned int l_len_x;
-  screen_block_t const __FAR* l_next;
+  screen_block_t const* l_next;
   int l_pos_y;
   unsigned int l_row;
 
@@ -236,7 +235,7 @@ extern void
 block_write_frame(
   struct block const* const i_block)
 {
-  screen_block_t const __FAR* l_next;
+  screen_block_t const* l_next;
 
   l_next = screen_write(
              (*i_block).m_pos_x,

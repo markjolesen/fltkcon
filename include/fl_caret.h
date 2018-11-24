@@ -132,7 +132,55 @@ namespace Fl
 
 #endif /* #if defined(__DOS__) && !defined(__CURSES__) */
 
-};
+#if defined(__CURSES__)
+
+inline void
+caret_set_position(
+  unsigned char const                   i_column,
+  unsigned char const                   i_row)
+{
+
+  move(
+    (Fl_Graphics_Driver::draw_offset_y + i_row),
+    (Fl_Graphics_Driver::draw_offset_x + i_column));
+
+  return;
+}
+
+inline void
+caret_hide()
+{
+
+  curs_set(0);
+
+  return;
+}
+
+inline void
+caret_underline()
+{
+
+  curs_set(1);
+  _caret_mode = CARET_INSERT;
+  _caret_is_visible = true;
+
+  return;
+}
+
+inline void
+caret_block()
+{
+
+  curs_set(2);
+  _caret_mode = CARET_OVERWRITE;
+  _caret_is_visible = true;
+
+  return;
+}
+
+#endif
+
+}
 
 #define __fl_caret_h__
 #endif

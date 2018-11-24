@@ -1,12 +1,9 @@
-// fl_sys.h
+// ncdrvwin.h
 //
-// (bits taken from fl_utf8.h)
-//
-// A base class for platform specific system calls
-// for the Fast Light Tool Kit (FLTK).
+// Curses Window handling code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2018 The fltkcon authors
-// Copyright 2010-2018 by Bill Spitzak and others.
+// Copyright 2017-2018 The fltkal authors
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -67,56 +64,64 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__fl_sys_h__)
+#if !defined(FL_NC_WINDOW_DRIVER_H)
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "drvwin.h"
+#include "block.h"
 
-namespace Fl
+class Fl_NC_Window_Driver : public Fl_Window_Driver
 {
 
-  extern char const _directory_separator;
+  public:
 
-  int chmod(const char* f, int mode);
+    Fl_NC_Window_Driver(Fl_Window*);
 
-  int access(const char* f, int mode);
+    virtual ~Fl_NC_Window_Driver();
 
-  int stat(const char* path, struct stat* buffer);
+    virtual int decorated_w();
 
-  char* getcwd(char* buf, int len);
+    virtual int decorated_h();
 
-  int chdir(const char* path);
+    virtual void draw_begin();
 
-  FILE* fopen(const char* f, const char* mode);
+    virtual void draw_end();
 
-  int system(const char* f);
+    virtual Fl_X* makeWindow();
 
-  int execvp(const char* file, char* const* argv);
+    virtual void take_focus();
 
-  int open(const char* fname, int oflags, ...);
+    virtual void show();
 
-  int open_binary(const char* fname, int binary, int oflags, ...);
+    virtual void hide();
 
-  int unlink(const char* fname);
+    virtual void erase_menu();
 
-  int rmdir(const char* f);
+    virtual void show_menu();
 
-  char* getenv(const char* name);
+    virtual void resize(int X, int Y, int W, int H);
 
-  int mkdir(const char* f, int mode);
+    virtual int scrollto(
+      int const X,
+      int const Y,
+      unsigned int const W,
+      unsigned int const H,
+      int const dx,
+      int const dy,
+      void (*draw_area)(
+        void*,
+        int const,
+        int const,
+        unsigned int const,
+        unsigned int const,
+        enum Fl::foreground const,
+        enum Fl::background const),
+      void* data,
+      struct Fl::skin_widget const& skin);
 
-  int rename(const char* f, const char* t);
+  protected:
 
-  void make_path_for_file(const char* path);
+    struct block* block_;
+};
 
-  char make_path(const char* path);
-
-}
-
-#define __fl_sys_h__
+#define FL_NC_WINDOW_DRIVER_H
 #endif

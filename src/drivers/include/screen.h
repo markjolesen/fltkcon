@@ -30,14 +30,6 @@ typedef chtype screen_block_t;
 typedef chtype screen_char_t;
 #endif
 
-#ifndef __FAR
-#   if defined(__FLAT__ ) || defined(__LARGE__)
-#       define __FAR
-#   else
-#       define __FAR __far
-#   endif
-#endif
-
 #if (defined(__DOS__) || defined(__DJGPP__)) && !defined(__CURSES__)
 
 enum foreground
@@ -182,10 +174,7 @@ extern "C" {
 
 extern unsigned int                     _video_cols;
 extern unsigned int                     _video_rows;
-
-#if defined(__CURSES__)
 extern int                              _video_has_color;
-#endif
 
 extern int screen_init();
 
@@ -200,11 +189,6 @@ screen_set50lines();
 #if defined(__CURSES__)
 #define screen_set25lines() -1
 #define screen_set50lines() -1
-#endif
-
-#if defined(__NT__) || defined(__CURSES__)
-extern void
-screen_changed_size();
 #endif
 
 extern void
@@ -245,7 +229,7 @@ extern void
 screen_puts(
   int const                           i_col,
   int const                           i_row,
-  unsigned char const __FAR*          i_string,
+  unsigned char const*                i_string,
   unsigned int const                  i_length,
   enum foreground const               i_fcolor,
   enum background const               i_bcolor);
@@ -263,32 +247,32 @@ screen_getc(
   int const                           i_col,
   int const                           i_row);
 
-extern screen_block_t __FAR*
+extern screen_block_t*
 screen_read(
-  screen_block_t __FAR*               o_block,
+  screen_block_t*                     o_block,
   unsigned int const                  i_columns,
   int const                           i_col,
   int const                           i_row);
 
-extern screen_block_t __FAR*
+extern screen_block_t*
 screen_readv(
-  screen_block_t __FAR*               o_block,
+  screen_block_t*                     o_block,
   unsigned int const                  i_rows,
   int const                           i_col,
   int const                           i_row);
 
-extern screen_block_t const __FAR*
+extern screen_block_t const*
 screen_write(
   int const                           i_col,
   int const                           i_row,
-  screen_block_t const __FAR*         i_block,
+  screen_block_t const*               i_block,
   unsigned int const                  i_columns);
 
-extern screen_block_t const __FAR*
+extern screen_block_t const*
 screen_writev(
   int const                           i_col,
   int const                           i_row,
-  screen_block_t const __FAR*         i_block,
+  screen_block_t const*               i_block,
   unsigned int const                  i_rows);
 
 extern void
@@ -297,11 +281,6 @@ screen_push(
 
 extern void
 screen_pop();
-
-#if defined(__FLAT__) && !defined(__NT__)
-#define screen_push(i_copy)
-#define screen_pop()
-#endif
 
 #ifdef __cplusplus
 }

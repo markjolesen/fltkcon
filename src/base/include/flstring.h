@@ -74,6 +74,11 @@
 #include <string.h>
 #include <ctype.h>
 
+#if defined(__GNUC__)
+#define strlcpy fl_strlcpy
+#define strlcat fl_strlcat
+#endif
+
 /*
  * Apparently Unixware defines "index" to strchr (!) rather than
  * providing a proper entry point or not providing the (obsolete)

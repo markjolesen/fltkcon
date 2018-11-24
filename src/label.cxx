@@ -130,7 +130,7 @@ Fl_Label::draw(
   return;
 }
 
-static void
+void
 Fl_Label::draw(
   int const i_pos_x,
   int const i_pos_y,

@@ -1,12 +1,8 @@
-// fl_sys.h
+// ncdrvsys.h
 //
-// (bits taken from fl_utf8.h)
-//
-// A base class for platform specific system calls
-// for the Fast Light Tool Kit (FLTK).
+// Cursors System Driver for the Fast Light Tool Kit (FLTK)
 //
 // Copyright 2018 The fltkcon authors
-// Copyright 2010-2018 by Bill Spitzak and others.
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -67,56 +63,26 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__fl_sys_h__)
+#if !defined(FL_NC_SYSTEM_DRIVER_H)
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "drvsys.h"
 
-namespace Fl
+class Fl_NC_System_Driver : public Fl_System_Driver
 {
 
-  extern char const _directory_separator;
+  public:
 
-  int chmod(const char* f, int mode);
+    Fl_NC_System_Driver();
 
-  int access(const char* f, int mode);
+    virtual ~Fl_NC_System_Driver();
 
-  int stat(const char* path, struct stat* buffer);
+    virtual int
+    need_test_shortcut_extra()
+    {
+      return true;
+    }
 
-  char* getcwd(char* buf, int len);
+};
 
-  int chdir(const char* path);
-
-  FILE* fopen(const char* f, const char* mode);
-
-  int system(const char* f);
-
-  int execvp(const char* file, char* const* argv);
-
-  int open(const char* fname, int oflags, ...);
-
-  int open_binary(const char* fname, int binary, int oflags, ...);
-
-  int unlink(const char* fname);
-
-  int rmdir(const char* f);
-
-  char* getenv(const char* name);
-
-  int mkdir(const char* f, int mode);
-
-  int rename(const char* f, const char* t);
-
-  void make_path_for_file(const char* path);
-
-  char make_path(const char* path);
-
-}
-
-#define __fl_sys_h__
+#define FL_NC_SYSTEM_DRIVER_H
 #endif

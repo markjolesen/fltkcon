@@ -1,12 +1,9 @@
-// fl_sys.h
+// ncdrvscr.h
 //
-// (bits taken from fl_utf8.h)
-//
-// A base class for platform specific system calls
-// for the Fast Light Tool Kit (FLTK).
+// Curses Screen Driver for the Fast Light Tool Kit (FLTK)
 //
 // Copyright 2018 The fltkcon authors
-// Copyright 2010-2018 by Bill Spitzak and others.
+// Copyright 2017-2018 The fltkal authors
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -67,56 +64,94 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__fl_sys_h__)
+#if !defined(FL_NC_SCREEN_DRIVER_H)
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <time.h>
+#include "drvscr.h"
+#include "fl_enums.h"
+#include "fl_timer.h"
+#include "ncwm.h"
 
-namespace Fl
+class Fl_NC_Screen_Driver : public Fl_Screen_Driver
 {
 
-  extern char const _directory_separator;
+  protected:
 
-  int chmod(const char* f, int mode);
+    enum status
+    {
+      STATUS_CLEAR = 0,
+      STATUS_PUSHED,
+      STATUS_STICKY
+    };
 
-  int access(const char* f, int mode);
+    struct
+    {
+      enum status status;
+      int x;
+      int y;
+    } state_;
 
-  int stat(const char* path, struct stat* buffer);
+    ncwm wm_;
 
-  char* getcwd(char* buf, int len);
+    void
+    event_key(
+      Fl_Window& window,
+      int const ascii,
+      int const scan) const;
 
-  int chdir(const char* path);
+    void
+    event_key(
+      Fl_Window& window,
+      int const key) const;
 
-  FILE* fopen(const char* f, const char* mode);
+    void
+    event_mouse(
+      Fl_Window& window);
 
-  int system(const char* f);
+    int
+    poll(Fl_Window& window);
 
-  int execvp(const char* file, char* const* argv);
+  public:
 
-  int open(const char* fname, int oflags, ...);
+    Fl_NC_Screen_Driver();
 
-  int open_binary(const char* fname, int binary, int oflags, ...);
+    virtual ~Fl_NC_Screen_Driver();
 
-  int unlink(const char* fname);
+    virtual void init();
 
-  int rmdir(const char* f);
+    virtual int x();
 
-  char* getenv(const char* name);
+    virtual int y();
 
-  int mkdir(const char* f, int mode);
+    virtual int w();
 
-  int rename(const char* f, const char* t);
+    virtual int h();
 
-  void make_path_for_file(const char* path);
+    virtual void screen_xywh(int& X, int& Y, int& W, int& H, int n);
 
-  char make_path(const char* path);
+    virtual void screen_work_area(int& X, int& Y, int& W, int& H, int n);
 
-}
+    virtual void beep(int type);
 
-#define __fl_sys_h__
+    virtual void flush();
+
+    virtual double wait(double time_to_wait);
+
+    virtual int ready();
+
+    virtual void grab(Fl_Window* win);
+
+    virtual void add_timeout(double time, Fl_Timeout_Handler cb, void* argp);
+
+    virtual void repeat_timeout(double time, Fl_Timeout_Handler cb, void* argp);
+
+    virtual int has_timeout(Fl_Timeout_Handler cb, void* argp);
+
+    virtual void remove_timeout(Fl_Timeout_Handler cb, void* argp);
+
+    virtual int compose(int& del);
+
+};
+
+#define FL_NC_SCREEN_DRIVER_H
 #endif

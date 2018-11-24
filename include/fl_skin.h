@@ -69,7 +69,7 @@ namespace Fl
   extern struct skin_box _skin_box;
   extern struct skin_editor _skin_editor;
 
-};
+}
 
 #define __skin_h__
 #endif

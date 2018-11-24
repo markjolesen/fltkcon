@@ -128,7 +128,7 @@ namespace Fl
     gr().clip_replace(i_pos_x, i_pos_y, i_len_x, i_len_y);
   }
 
-};
+}
 
 #define  __fl_clip_h__
 #endif

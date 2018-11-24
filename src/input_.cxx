@@ -169,70 +169,64 @@ Fl_Input_::drawtext(
   unsigned int i_len_y) const
 {
 
+  Fl::draw_fill(i_pos_x, i_pos_y, i_len_x, i_len_y, 0x20,
+                Fl::fcolor_white, Fl::bcolor_black);
+
+  Fl::clip_push(i_pos_x, i_pos_y, i_len_x, i_len_y);
+
+  struct inpbuf* l_buf = inplist_nth((*cur_).m_list, (*cur_).m_offset_y);
+  unsigned int l_line = 0;
+
   do
   {
 
-    if (this == Fl::focus())
+    if (0 == l_buf)
     {
-      if (false == Fl::_caret_is_visible)
-      {
-        if (Fl::CARET_OVERWRITE == Fl::_caret_mode)
-        {
-          Fl::caret_block();
-        }
-
-        else
-        {
-          Fl::caret_underline();
-        }
-      }
-
-      Fl::caret_set_position((x_ + (*cur_).m_caret_x), (y_ + (*cur_).m_caret_y));
+      break;
     }
 
-    Fl::draw_fill(i_pos_x, i_pos_y, i_len_x, i_len_y, 0x20,
-                  Fl::fcolor_white, Fl::bcolor_black);
-
-    Fl::clip_push(i_pos_x, i_pos_y, i_len_x, i_len_y);
-
-    struct inpbuf* l_buf = inplist_nth((*cur_).m_list, (*cur_).m_offset_y);
-    unsigned int l_line = 0;
-
-    do
+    if (i_len_y <= l_line)
     {
-
-      if (0 == l_buf)
-      {
-        break;
-      }
-
-      if (i_len_y <= l_line)
-      {
-        break;
-      }
-
-      if ((*cur_).m_offset_x < (*l_buf).m_length)
-      {
-        unsigned char const* l_data = &(*l_buf).m_data[(*cur_).m_offset_x];
-        Fl::draw_puts(
-          x_,
-          y_ + l_line,
-          l_data,
-          (*l_buf).m_length - (*cur_).m_offset_x,
-          Fl::fcolor_white,
-          Fl::bcolor_black);
-      }
-
-      l_line++;
-      l_buf = (*l_buf).m_next;
-
+      break;
     }
-    while (1);
 
-    Fl::clip_pop();
+    if ((*cur_).m_offset_x < (*l_buf).m_length)
+    {
+      unsigned char const* l_data = &(*l_buf).m_data[(*cur_).m_offset_x];
+      Fl::draw_puts(
+        x_,
+        y_ + l_line,
+        l_data,
+        (*l_buf).m_length - (*cur_).m_offset_x,
+        Fl::fcolor_white,
+        Fl::bcolor_black);
+    }
+
+    l_line++;
+    l_buf = (*l_buf).m_next;
 
   }
-  while (0);
+  while (1);
+
+  Fl::clip_pop();
+
+  if (this == Fl::focus())
+  {
+    if (false == Fl::_caret_is_visible)
+    {
+      if (Fl::CARET_OVERWRITE == Fl::_caret_mode)
+      {
+        Fl::caret_block();
+      }
+
+      else
+      {
+        Fl::caret_underline();
+      }
+    }
+
+    Fl::caret_set_position((x_ + (*cur_).m_caret_x), (y_ + (*cur_).m_caret_y));
+  }
 
   return;
 }

@@ -184,7 +184,7 @@ namespace Fl
     return expired;
   }
 
-};
+}
 
 #define __FL_TICKS_H__
 #endif

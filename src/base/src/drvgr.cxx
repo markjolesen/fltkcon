@@ -564,13 +564,17 @@ Fl_Graphics_Driver::flip_to_onscreen() const
 void
 Fl_Graphics_Driver::mouse_hide()
 {
+#if !defined(__CURSES__)
   ::mouse_hide();
+#endif
   return;
 }
 
 void
 Fl_Graphics_Driver::mouse_show()
 {
+#if !defined(__CURSES__)
   ::mouse_show();
+#endif
   return;
 }
