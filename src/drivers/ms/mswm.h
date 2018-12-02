@@ -1,6 +1,6 @@
-// ncwm.h
+// mswm.h
 //
-// Curses manager for the Fast Light Tool Kit (FLTK)
+// window manager for the Fast Light Tool Kit (FLTK)
 //
 // Copyright 2018 The fltkcon authors
 //
@@ -63,18 +63,18 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__NCWM_H__)
+#if !defined(__MSWM_H__)
 
 #include "wm.h"
 
-class ncwm : public wm
+class mswm : public wm
 {
 
   public:
 
-    ncwm();
+    mswm();
 
-    virtual ~ncwm();
+    virtual ~mswm();
 
   protected:
 
@@ -83,5 +83,5 @@ class ncwm : public wm
 
 };
 
-#define __NCWM_H__
+#define __MSWM_H__
 #endif

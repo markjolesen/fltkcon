@@ -167,6 +167,7 @@ block_screen_read_frame(
              (*io_block).m_len_y - 2,
              ((*io_block).m_pos_x + (*io_block).m_len_x - 1),
              (*io_block).m_pos_y + 1);
+
   return;
 }
 

@@ -26,9 +26,9 @@ namespace Fl
     CARET_INSERT                        = 1
   };
 
-  extern bool                             _caret_can_hide;
-  extern bool                             _caret_is_visible;
-  extern enum caret_mode                  _caret_mode;
+  extern bool                           _caret_can_hide;
+  extern bool                           _caret_is_visible;
+  extern enum caret_mode                _caret_mode;
 
   extern void
   caret_set_position(
@@ -134,51 +134,113 @@ namespace Fl
 
 #if defined(__CURSES__)
 
-inline void
-caret_set_position(
-  unsigned char const                   i_column,
-  unsigned char const                   i_row)
-{
+  inline void
+  caret_set_position(
+    unsigned char const                   i_column,
+    unsigned char const                   i_row)
+  {
 
-  move(
-    (Fl_Graphics_Driver::draw_offset_y + i_row),
-    (Fl_Graphics_Driver::draw_offset_x + i_column));
+    move(
+      (Fl_Graphics_Driver::draw_offset_y + i_row),
+      (Fl_Graphics_Driver::draw_offset_x + i_column));
 
-  return;
-}
+    return;
+  }
 
-inline void
-caret_hide()
-{
+  inline void
+  caret_hide()
+  {
 
-  curs_set(0);
+    curs_set(0);
+    _caret_is_visible = false;
 
-  return;
-}
+    return;
+  }
 
-inline void
-caret_underline()
-{
+  inline void
+  caret_underline()
+  {
 
-  curs_set(1);
-  _caret_mode = CARET_INSERT;
-  _caret_is_visible = true;
+    curs_set(1);
+    _caret_mode = CARET_INSERT;
+    _caret_is_visible = true;
 
-  return;
-}
+    return;
+  }
 
-inline void
-caret_block()
-{
+  inline void
+  caret_block()
+  {
 
-  curs_set(2);
-  _caret_mode = CARET_OVERWRITE;
-  _caret_is_visible = true;
+    curs_set(2);
+    _caret_mode = CARET_OVERWRITE;
+    _caret_is_visible = true;
 
-  return;
-}
+    return;
+  }
 
-#endif
+#endif /* #if defined(__CURSES__) */
+
+#if defined(__NT__)
+
+  extern "C" HANDLE                       _screen_active;
+
+  inline void
+  caret_set_position(
+    unsigned char const                 i_column,
+    unsigned char const                 i_row)
+  {
+    COORD                               l_coord;
+
+    l_coord.X = (Fl_Graphics_Driver::draw_offset_x + i_column);
+    l_coord.Y = (Fl_Graphics_Driver::draw_offset_y + i_row);
+    SetConsoleCursorPosition(_screen_active, l_coord);
+
+    return;
+  }
+
+  inline void
+  caret_hide()
+  {
+    CONSOLE_CURSOR_INFO                 l_info;
+
+    GetConsoleCursorInfo(_screen_active, &l_info);
+    l_info.bVisible = 0;
+    SetConsoleCursorInfo(_screen_active, &l_info);
+    _caret_is_visible = false;
+
+    return;
+  }
+
+  inline void
+  caret_underline()
+  {
+    CONSOLE_CURSOR_INFO                 l_info;
+
+    l_info.dwSize = 15;
+    l_info.bVisible = 1;
+    SetConsoleCursorInfo(_screen_active, &l_info);
+    _caret_mode = CARET_INSERT;
+    _caret_is_visible = true;
+
+    return;
+  }
+
+  inline void
+  caret_block()
+  {
+    CONSOLE_CURSOR_INFO                 l_info;
+
+    l_info.dwSize = 100;
+    l_info.bVisible = 1;
+    SetConsoleCursorInfo(_screen_active, &l_info);
+    _caret_mode = CARET_OVERWRITE;
+    _caret_is_visible = true;
+
+    return;
+  }
+
+#endif /* #if defined(__NT__) */
 
 }
 

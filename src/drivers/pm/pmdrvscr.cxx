@@ -733,7 +733,6 @@ double
 Fl_PM_Screen_Driver::wait(double time_to_wait)
 {
   int rc;
-  char buf[2];
 
   do
   {

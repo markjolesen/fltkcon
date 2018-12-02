@@ -1,6 +1,6 @@
-// ncwm.h
+// msdrvsys.h
 //
-// Curses manager for the Fast Light Tool Kit (FLTK)
+// MS System Driver for the Fast Light Tool Kit (FLTK)
 //
 // Copyright 2018 The fltkcon authors
 //
@@ -63,25 +63,26 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__NCWM_H__)
+#if !defined(FL_MS_SYSTEM_DRIVER_H)
 
-#include "wm.h"
+#include "drvsys.h"
 
-class ncwm : public wm
+class Fl_MS_System_Driver : public Fl_System_Driver
 {
 
   public:
 
-    ncwm();
+    Fl_MS_System_Driver();
 
-    virtual ~ncwm();
+    virtual ~Fl_MS_System_Driver();
 
-  protected:
-
-    virtual void
-    handle_push(Fl_Window& window, hit_type const what) const;
+    virtual int
+    need_test_shortcut_extra()
+    {
+      return true;
+    }
 
 };
 
-#define __NCWM_H__
+#define FL_MS_SYSTEM_DRIVER_H
 #endif

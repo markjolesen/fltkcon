@@ -1,8 +1,9 @@
-// ncwm.h
+// msdrvscr.h
 //
-// Curses manager for the Fast Light Tool Kit (FLTK)
+// MS Screen Driver for the Fast Light Tool Kit (FLTK)
 //
 // Copyright 2018 The fltkcon authors
+// Copyright 2017-2018 The fltkal authors
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -63,25 +64,77 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__NCWM_H__)
+#if !defined(FL_MS_SCREEN_DRIVER_H)
 
-#include "wm.h"
+#include <windows.h>
+#include <time.h>
+#include "drvscr.h"
+#include "fl_enums.h"
+#include "fl_timer.h"
+#include "mswm.h"
 
-class ncwm : public wm
+class Fl_MS_Screen_Driver : public Fl_Screen_Driver
 {
-
-  public:
-
-    ncwm();
-
-    virtual ~ncwm();
 
   protected:
 
-    virtual void
-    handle_push(Fl_Window& window, hit_type const what) const;
+    struct
+    {
+      DWORD btn;
+    } state_;
+
+    mswm wm_;
+
+    void
+    event_key(Fl_Window& window, KEY_EVENT_RECORD& event);
+
+    void
+    event_mouse(Fl_Window& window, MOUSE_EVENT_RECORD& event);
+
+    void
+    poll(Fl_Window& window);
+
+  public:
+
+    Fl_MS_Screen_Driver();
+
+    virtual ~Fl_MS_Screen_Driver();
+
+    virtual void init();
+
+    virtual int x();
+
+    virtual int y();
+
+    virtual int w();
+
+    virtual int h();
+
+    virtual void screen_xywh(int& X, int& Y, int& W, int& H, int n);
+
+    virtual void screen_work_area(int& X, int& Y, int& W, int& H, int n);
+
+    virtual void beep(int type);
+
+    virtual void flush();
+
+    virtual double wait(double time_to_wait);
+
+    virtual int ready();
+
+    virtual void grab(Fl_Window* win);
+
+    virtual void add_timeout(double time, Fl_Timeout_Handler cb, void* argp);
+
+    virtual void repeat_timeout(double time, Fl_Timeout_Handler cb, void* argp);
+
+    virtual int has_timeout(Fl_Timeout_Handler cb, void* argp);
+
+    virtual void remove_timeout(Fl_Timeout_Handler cb, void* argp);
+
+    virtual int compose(int& del);
 
 };
 
-#define __NCWM_H__
+#define FL_MS_SCREEN_DRIVER_H
 #endif

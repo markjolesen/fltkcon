@@ -1,8 +1,9 @@
-// ncwm.h
+// msdrvwin.h
 //
-// Curses manager for the Fast Light Tool Kit (FLTK)
+// MS Window handling code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2018 The fltkcon authors
+// Copyright 2017-2018 The fltkal authors
 //
 //                              FLTK License
 //                            December 11, 2001
@@ -63,25 +64,64 @@
 //     You should have received a copy of the GNU Library General Public
 //     License along with FLTK.  If not, see <http://www.gnu.org/licenses/>.
 //
-#if !defined(__NCWM_H__)
+#if !defined(FL_MS_WINDOW_DRIVER_H)
 
-#include "wm.h"
+#include "drvwin.h"
+#include "block.h"
 
-class ncwm : public wm
+class Fl_MS_Window_Driver : public Fl_Window_Driver
 {
 
   public:
 
-    ncwm();
+    Fl_MS_Window_Driver(Fl_Window*);
 
-    virtual ~ncwm();
+    virtual ~Fl_MS_Window_Driver();
+
+    virtual int decorated_w();
+
+    virtual int decorated_h();
+
+    virtual void draw_begin();
+
+    virtual void draw_end();
+
+    virtual Fl_X* makeWindow();
+
+    virtual void take_focus();
+
+    virtual void show();
+
+    virtual void hide();
+
+    virtual void erase_menu();
+
+    virtual void show_menu();
+
+    virtual void resize(int X, int Y, int W, int H);
+
+    virtual int scrollto(
+      int const X,
+      int const Y,
+      unsigned int const W,
+      unsigned int const H,
+      int const dx,
+      int const dy,
+      void (*draw_area)(
+        void*,
+        int const,
+        int const,
+        unsigned int const,
+        unsigned int const,
+        enum Fl::foreground const,
+        enum Fl::background const),
+      void* data,
+      struct Fl::skin_widget const& skin);
 
   protected:
 
-    virtual void
-    handle_push(Fl_Window& window, hit_type const what) const;
-
+    struct block* block_;
 };
 
-#define __NCWM_H__
+#define FL_MS_WINDOW_DRIVER_H
 #endif

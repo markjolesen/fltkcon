@@ -66,16 +66,22 @@
 //
 #if !defined(__FL_TICKS_H__)
 
-#include <time.h>
-#include <math.h>
 #if defined(__DOS__)
 #include <dos.h>
+#elif defined(__NT__)
+#include <windows.h>
 #endif
+
+#include <limits.h>
+#include <time.h>
+#include <math.h>
 
 namespace Fl
 {
 
 #if defined(__DOS__)
+  typedef double ticks_t;
+#elif defined(__NT__)
   typedef double ticks_t;
 #else
   typedef struct timespec ticks_t;
@@ -91,6 +97,10 @@ namespace Fl
     ticks += ((double)spec.minute * 60.0);
     ticks += ((double)spec.second);
     ticks += ((double)spec.hsecond * 0.01);
+#elif defined(__NT__)
+    LARGE_INTEGER count;
+    QueryPerformanceCounter(&count);
+    ticks = count.QuadPart;
 #else
     clock_gettime(CLOCK_REALTIME, &ticks);
 #endif
@@ -102,6 +112,10 @@ namespace Fl
   {
 #if defined(__DOS__)
     ticks = seconds;
+#elif defined(__NT__)
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+    ticks = (seconds / freq.QuadPart);
 #else
 
     if (0 < seconds)
@@ -127,7 +141,7 @@ namespace Fl
   inline void
   ticks_subtract(ticks_t& result, ticks_t const& begin, ticks_t const& end)
   {
-#if defined(__DOS__)
+#if defined(__DOS__) || defined(__NT__)
     result = (end - begin);
 #else
     long sec_diff = (end.tv_sec - begin.tv_sec);
@@ -154,7 +168,7 @@ namespace Fl
   ticks_elapse(ticks_t& ticks, ticks_t const& elapsed)
   {
     bool expired = false;
-#if defined(__DOS__)
+#if defined(__DOS__) || defined(__NT__)
     ticks = ticks - elapsed;
 
     if (0 > ticks)

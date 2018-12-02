@@ -162,6 +162,16 @@ Fl_Menu_Item align_choices[] =
 int
 main(int argc, char** argv)
 {
+    static enum Fl::background bgcolor[]=
+    {
+	    Fl::bcolor_black,
+	    Fl::bcolor_blue,
+	    Fl::bcolor_green,
+	    Fl::bcolor_cyan,
+	    Fl::bcolor_red,
+	    Fl::bcolor_magenta,
+	    Fl::bcolor_light_gray
+    };
 
   Fl_Window window(1, 1, 35, 15);
 
@@ -178,7 +188,7 @@ main(int argc, char** argv)
       Fl_Button* b = new Fl_Button((x - 1) * 12, y, 10, 1);
       b->copy_label(buf);
       b->skin_.normal_fcolor = Fl::fcolor_white;
-      b->skin_.normal_bcolor = static_cast<Fl::background>(x);
+      b->skin_.normal_bcolor = bgcolor[x];
       b->skin_.focused_fcolor = Fl::fcolor_black;
       b->skin_.focused_bcolor = Fl::bcolor_light_gray;
     }
@@ -192,7 +202,7 @@ main(int argc, char** argv)
       Fl_Button* b = new Fl_Button((x - 1) * 12, y, 10, 1);
       b->copy_label(buf);
       b->skin_.normal_fcolor = Fl::fcolor_white;
-      b->skin_.normal_bcolor = static_cast<Fl::background>(x);
+      b->skin_.normal_bcolor = bgcolor[x];
       b->skin_.focused_fcolor = Fl::fcolor_black;
       b->skin_.focused_bcolor = Fl::bcolor_light_gray;
     }
