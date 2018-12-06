@@ -849,6 +849,8 @@ Fl_Text_Editor::handle(
         buffer()->unselect();
 
       return 1;
+    default:
+      break;
   }
 
   return Fl_Text_Display::handle(event);

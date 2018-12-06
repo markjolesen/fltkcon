@@ -133,8 +133,9 @@ Fl_Scrollbar::timeout_cb(void* v)
   Fl::add_timeout(REPEAT, timeout_cb, s);
 }
 
-int
-Fl_Scrollbar::handle(int event)
+bool
+Fl_Scrollbar::handle(
+  enum Fl_Event const event)
 {
   int area;
   int X = x();
@@ -335,6 +336,8 @@ Fl_Scrollbar::handle(int event)
 
       return 1;
     }
+    default:
+      break;
   }
 
   return 0;

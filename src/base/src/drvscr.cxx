@@ -228,7 +228,7 @@ Fl_Screen_Driver::input_widget_handle_key(
   {
     case FL_Delete:
     {
-      int selected = false; // __mjo (input->position() != input->mark()) ? 1 : 0;
+      // int selected = false; // __mjo (input->position() != input->mark()) ? 1 : 0;
 
 //      if (mods == 0 && shift && selected)
 //        return input->kf_copy_cut();    // Shift-Delete with selection (WP,NP,WOW,GE,KE,OF)
@@ -357,12 +357,14 @@ Fl_Screen_Driver::input_widget_handle_key(
   return false;
 }
 
+#if 0
 static void
 del_transient_window(void* data)
 {
   Fl_Window* win = (Fl_Window*)data;
   Fl::delete_widget(win);
 }
+#endif
 
 void
 Fl_Screen_Driver::open_display()
@@ -373,7 +375,7 @@ Fl_Screen_Driver::open_display()
   if (!been_here)
   {
     been_here = true;
-    int scount = screen_count(); // keep here
+    // int scount = screen_count(); // keep here
   }
 }
 

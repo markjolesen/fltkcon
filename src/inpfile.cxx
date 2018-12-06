@@ -93,7 +93,7 @@ Fl_File_Input::Fl_File_Input(
 void
 Fl_File_Input::draw_buttons()
 {
-  int i, X;
+  unsigned int i, X;
   int l_pos_x;
   unsigned int l_len_x;
 
@@ -253,7 +253,7 @@ Fl_File_Input::handle(enum Fl_Event const event)
 int
 Fl_File_Input::handle_button(int event)
 {
-  int i, X;
+  unsigned int i, X;
   unsigned char* start;
   unsigned char const* end;
   unsigned char newvalue[FL_PATH_MAX];
@@ -263,7 +263,7 @@ Fl_File_Input::handle_button(int event)
   {
     X += buttons_[i];
 
-    if (X > cur_->m_offset_x && Fl::event_x() < (x() + X - cur_->m_offset_x)) break;
+    if (X > cur_->m_offset_x && Fl::event_x() < (int)(x() + X - cur_->m_offset_x)) break;
   }
 
   if (event == FL_RELEASE) pressed_ = -1;

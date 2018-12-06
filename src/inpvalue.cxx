@@ -103,7 +103,7 @@ Fl_Value_Input::draw()
 }
 
 void
-Fl_Value_Input::resize(int X, int Y, int W, int H)
+Fl_Value_Input::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
   Fl_Valuator::resize(X, Y, W, H);
   input.resize(X, Y, W, H);

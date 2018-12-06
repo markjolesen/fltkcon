@@ -97,12 +97,14 @@ fl_color()
 
 inline void
 fl_focus_rect(int x, int y, int w, int h) { /*fl_graphics_driver->focus_rect(x, y, w, h); */}
+/*
 inline void
 fl_rect(int x, int y, int w, int h, Fl_Color c)
 {
   fl_color(c);
   fl_rect(x, y, w, h, c);
 }
+*/
 inline void
 fl_rectf(int x, int y, int w, int h) { /*fl_graphics_driver->rectf(x,y,w,h); */}
 inline void

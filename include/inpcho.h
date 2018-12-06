@@ -146,7 +146,12 @@ class Fl_Input_Choice : public Fl_Group
       unsigned int const i_len_y,
       unsigned char const* i_label = 0L);
 
-    void resize(int X, int Y, int W, int H);
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
 
     void
     add(const unsigned char* s)

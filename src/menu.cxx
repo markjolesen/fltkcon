@@ -449,7 +449,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   {
     Y = Y + Hp;
 
-    if (Y + h() > scr_y + scr_h && Y - h() >= scr_y)
+    if ((int)(Y + h()) > (int)(scr_y + scr_h) && (int)(Y - h()) >= (int)scr_y)
     {
       if (Hp > 1)
       {
@@ -477,7 +477,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     h(1);
   }
 
-  if (scr_h <= (y_ + h_))
+  if (scr_h <= (int)(y_ + h_))
   {
     y_ -= (y_ + h_ - scr_h + 1);
   }
@@ -536,19 +536,19 @@ menuwindow::autoscroll(int n)
   do
   {
 
-    if (n >= offset_y && n < (offset_y + h_ - 1))
+    if (n >= (int)offset_y && n < (int)(offset_y + h_ - 1))
     {
       break;
     }
 
-    if (n < offset_y)
+    if (n < (int)offset_y)
     {
-      for (; n < offset_y; offset_y--);
+      for (; n < (int)offset_y; offset_y--);
 
       break;
     }
 
-    for (; n > (offset_y + h_ - 1); offset_y++);
+    for (; n > (int)(offset_y + h_ - 1); offset_y++);
 
   }
   while (0);
@@ -636,7 +636,7 @@ menuwindow::drawentry(
 
   if (m->flags & FL_MENU_DIVIDER)
   {
-    if ((yy + 1) < h_)
+    if ((yy + 1) < (int)h_)
     {
       Fl::draw_fill(xx, yy + 1, ww + 1, 1, Fl::_skin_sym.hline,
                     Fl_Widget::skin_.menu_fcolor, Fl_Widget::skin_.menu_bcolor);
@@ -744,7 +744,7 @@ menuwindow::find_selected(int mx, int my)
   mx -= x();
   my -= y();
 
-  if (my < 0 || my >= h()) return -1;
+  if (my < 0 || my >= (int)h()) return -1;
 
   if (!itemheight)
   {
@@ -764,7 +764,7 @@ menuwindow::find_selected(int mx, int my)
     return n;
   }
 
-  if (mx < 0 || mx > w_) return -1;
+  if (mx < 0 || mx > (int)w_) return -1;
 
   if (my < 0 || my >= numitems) return -1;
 
@@ -785,8 +785,8 @@ menuwindow::titlex(int n)
 int
 menuwindow::is_inside(int mx, int my)
 {
-  if ( mx < x_root() || mx >= x_root() + w() ||
-       my < y_root() || my >= y_root() + h())
+  if ( mx < x_root() || mx >= (int)(x_root() + w()) ||
+       my < y_root() || my >= (int)(y_root() + h()))
   {
     return 0;
   }
@@ -1198,6 +1198,8 @@ menuwindow::handle_part1(Fl_Event const e)
       }
 
       return 1;
+    default:
+      break;
   }
 
   return Fl_Window::handle(e);

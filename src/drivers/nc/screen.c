@@ -169,7 +169,6 @@ int
 screen_init()
 {
   int                                 l_exit;
-  int                                 l_rc;
 
   l_exit = 0;
 

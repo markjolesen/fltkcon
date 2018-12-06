@@ -169,9 +169,9 @@ Fl_Scroll::recalc_scrollbars(ScrollInfo& si)
 
       if (o->y() < si.child.t) si.child.t = o->y();
 
-      if (o->x() + o->w() > si.child.r) si.child.r = o->x() + o->w();
+      if ((int)(o->x() + o->w()) > si.child.r) si.child.r = o->x() + o->w();
 
-      if (o->y() + o->h() > si.child.b) si.child.b = o->y() + o->h();
+      if ((int)(o->y() + o->h()) > si.child.b) si.child.b = o->y() + o->h();
     }
   }
 
@@ -317,11 +317,11 @@ Fl_Scroll::draw()
       {
         if ((*a)->x() < L) L = (*a)->x();
 
-        if (((*a)->x() + (*a)->w()) > R) R = (*a)->x() + (*a)->w();
+        if ((int)((*a)->x() + (*a)->w()) > R) R = (*a)->x() + (*a)->w();
 
         if ((*a)->y() < T) T = (*a)->y();
 
-        if (((*a)->y() + (*a)->h()) > B) B = (*a)->y() + (*a)->h();
+        if ((int)((*a)->y() + (*a)->h()) > B) B = (*a)->y() + (*a)->h();
       }
 
       if (L > X) draw_clip(this, X, Y, L - X, H, skin_.normal_fcolor,
@@ -380,7 +380,7 @@ Fl_Scroll::draw()
       d = FL_DAMAGE_ALL;
     }
 
-    else if ( hscrollbar.h() != si.scrollsize || scrollbar.w() != si.scrollsize )
+    else if ((int)hscrollbar.h() != si.scrollsize || (int)scrollbar.w() != si.scrollsize )
     {
       d = FL_DAMAGE_ALL;
     }

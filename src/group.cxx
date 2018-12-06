@@ -133,6 +133,9 @@ send(Fl_Widget* o, Fl_Event const event)
     case FL_DND_ENTER:
     case FL_DND_DRAG:
       dndevent = (o->contains(Fl::belowmouse())) ? FL_DND_DRAG : FL_DND_ENTER;
+      break;
+    default:
+      break;
   }
 
   int save_x = Fl::e_x;
@@ -150,6 +153,8 @@ send(Fl_Widget* o, Fl_Event const event)
 
       if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
 
+      break;
+    default:
       break;
   }
 
@@ -488,8 +493,8 @@ Fl_Group::navigation(int const key)
       case FL_Down:
       case FL_Up:
 
-        if (o->x() >= previous->x() + previous->w() ||
-            o->x() + o->w() <= previous->x()) continue;
+        if (o->x() >= (int)(previous->x() + previous->w()) ||
+            (int)(o->x() + o->w()) <= previous->x()) continue;
     }
 
     if (o->take_focus()) return 1;
@@ -650,7 +655,7 @@ Fl_Group::add(Fl_Widget& o)
 void
 Fl_Group::remove(unsigned int const index)
 {
-  if (/*index < 0 ||*/ index >= children_) return;
+  if (/*index < 0 ||*/ static_cast<int>(index) >= children_) return;
 
   Fl_Widget& o = *child(index);
 
@@ -672,7 +677,7 @@ Fl_Group::remove(unsigned int const index)
 
   else if (children_ > 1)
   {
-    for (unsigned int slot = index; slot < children_;
+    for (unsigned int slot = index; static_cast<int>(slot) < children_;
          slot++) array_[slot] = array_[slot + 1];
   }
 

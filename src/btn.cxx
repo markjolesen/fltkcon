@@ -354,9 +354,9 @@ Fl_Button::Fl_Button(
   unsigned int const i_len_y,
   unsigned char const* i_label) :
   Fl_Widget(i_pos_x, i_pos_y, i_len_x, i_len_y, i_label),
+  shortcut_(0),
   value_(false),
-  oldval_(false),
-  shortcut_(0)
+  oldval_(false)
 {
   set_flag(SHORTCUT_LABEL);
 }

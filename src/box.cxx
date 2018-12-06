@@ -94,8 +94,9 @@ Fl_Box::draw()
   return;
 }
 
-int
-Fl_Box::handle(int event)
+bool
+Fl_Box::handle(
+  enum Fl_Event const event)
 {
   if (event == FL_ENTER || event == FL_LEAVE) return 1;
 

@@ -84,7 +84,14 @@ class Fl_Double_Window : public Fl_Window
     {
       Fl_Window::show(a, b);
     }
-    void resize(int, int, int, int);
+
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
+
     void hide();
     void flush();
     ~Fl_Double_Window();

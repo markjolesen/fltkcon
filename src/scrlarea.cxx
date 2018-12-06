@@ -89,7 +89,7 @@ fl_scroll(
 {
   if (!dx && !dy) return;
 
-  if (dx <= -W || dx >= W || dy <= -H || dy >= H)
+  if (dx <= -(int)W || dx >= (int)W || dy <= -(int)H || dy >= (int)H)
   {
     draw_area(data, X, Y, W, H, skin.normal_fcolor, skin.normal_bcolor);
     return;

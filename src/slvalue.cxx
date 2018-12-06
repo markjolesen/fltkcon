@@ -112,8 +112,9 @@ Fl_Value_Slider::draw()
   return;
 }
 
-int
-Fl_Value_Slider::handle(int event)
+bool
+Fl_Value_Slider::handle(
+      enum Fl_Event const event)
 {
   if (event == FL_PUSH && Fl::visible_focus())
   {

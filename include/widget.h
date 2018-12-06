@@ -358,13 +358,13 @@ class Fl_Widget
       return y_;
     }
 
-    int
+    unsigned int
     w() const
     {
       return w_;
     }
 
-    int
+    unsigned int
     h() const
     {
       return h_;

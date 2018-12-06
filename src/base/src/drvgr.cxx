@@ -212,7 +212,7 @@ Fl_Graphics_Driver::clip_box(
       }
     }
 
-    unsigned int l_pos_x2 = (l_region.m_pos_x + l_region.m_len_x - 1);
+    int l_pos_x2 = (l_region.m_pos_x + l_region.m_len_x - 1);
 
     if (o_pos_x < l_region.m_pos_x)
     {
@@ -237,12 +237,12 @@ Fl_Graphics_Driver::clip_box(
       o_pos_x = l_pos_x2;
     }
 
-    if (o_len_x && ((o_pos_x + o_len_x) > l_pos_x2))
+    if (o_len_x && ((int)(o_pos_x + o_len_x) > l_pos_x2))
     {
       o_len_x = 1 + (l_pos_x2 - o_pos_x);
     }
 
-    unsigned int l_pos_y2 = (l_region.m_pos_y + l_region.m_len_y - 1);
+    int l_pos_y2 = (l_region.m_pos_y + l_region.m_len_y - 1);
 
     if (o_pos_y < l_region.m_pos_y)
     {
@@ -267,7 +267,7 @@ Fl_Graphics_Driver::clip_box(
       o_pos_x = l_pos_x2;
     }
 
-    if (o_len_y && ((o_pos_y + o_len_y) > l_pos_y2))
+    if (o_len_y && ((int)(o_pos_y + o_len_y) > l_pos_y2))
     {
       o_len_y = 1 + (l_pos_y2 - o_pos_y);
     }

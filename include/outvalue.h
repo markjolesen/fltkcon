@@ -78,7 +78,11 @@ class Fl_Value_Output : public Fl_Valuator
     void draw();
 
   public:
-    int handle(int);
+
+    virtual bool
+    handle(
+      enum Fl_Event const event);
+
     Fl_Value_Output(
       int const i_pos_x,
       int const i_pos_y,

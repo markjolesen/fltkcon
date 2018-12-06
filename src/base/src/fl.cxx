@@ -256,7 +256,7 @@ Fl::event_inside(const Fl_Widget* o) /*const*/
 {
   int mx = e_x - o->x();
   int my = e_y - o->y();
-  return (mx >= 0 && mx < o->w() && my >= 0 && my < o->h());
+  return (mx >= 0 && mx < (int)o->w() && my >= 0 && my < (int)o->h());
 }
 
 //
@@ -1169,8 +1169,10 @@ Fl::pushed(Fl_Widget* o)
   pushed_ = o;
 }
 
+#if 0
 static void
 nothing(Fl_Widget*) {}
+#endif
 // void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
 // void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
@@ -1543,7 +1545,7 @@ Fl::handle_(Fl_Event e, Fl_Window* window)
       if (grab()) wi = grab();
 
       {
-        Fl_Widget* pbm = belowmouse();
+//        Fl_Widget* pbm = belowmouse();
         bool ret = (wi && send_event(e, wi, window));
 #if 0
 

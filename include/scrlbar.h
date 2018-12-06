@@ -90,7 +90,10 @@ class Fl_Scrollbar : public Fl_Slider
       const unsigned char* i_label = 0L);
 
     ~Fl_Scrollbar();
-    int handle(int);
+
+    virtual bool
+    handle(
+      enum Fl_Event const event);
 
     int
     value() const

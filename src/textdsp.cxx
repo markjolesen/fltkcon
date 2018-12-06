@@ -306,12 +306,11 @@ Fl_Text_Display::longest_vline() const
 }
 
 void
-Fl_Text_Display::resize(int X, int Y, int W, int H)
+Fl_Text_Display::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
 
   Fl_Widget::resize(X, Y, W, H);
-  mColumnScale =
-    0;
+  mColumnScale = 0;
   recalc_display();
 }
 
@@ -336,8 +335,8 @@ Fl_Text_Display::recalc_display()
   text_area.w = W - mMargin.left - mMargin.right - mLineNumWidth;
   text_area.h = H - mMargin.top - mMargin.bottom;
 
-  int i;
 #if 0
+  int i;
 
   for (i = 0, mMaxsize = fl_height(textfont(), textsize()); i < mNStyles; i++)
     mMaxsize = max(mMaxsize, fl_height(mStyleTable[i].font, mStyleTable[i].size));
@@ -1829,7 +1828,7 @@ Fl_Text_Display::draw_string(int style,
     return;
   }
 
-  int fsize = 1;
+  // int fsize = 1;
   enum Fl::foreground fcolor = Fl_Widget::skin_.normal_fcolor;
   enum Fl::background bcolor = Fl_Widget::skin_.normal_bcolor;
 
@@ -2312,17 +2311,17 @@ Fl_Text_Display::h_scrollbar_cb(Fl_Scrollbar* b, Fl_Text_Display* textD)
 void
 Fl_Text_Display::draw_line_numbers(bool /*clearAll*/)
 {
-  int Y, line, visLine, lineStart;
-  char lineNumString[16];
-  int lineHeight = 1;
-  int isactive = active_r() ? 1 : 0;
+  // int Y, line, visLine ,lineStart;
+  // char lineNumString[16];
+  // int lineHeight = 1;
+  // int isactive = active_r() ? 1 : 0;
 
   if (mLineNumWidth <= 0 || !visible_r())
     return;
 
-  int hscroll_h = mHScrollBar->visible() ? mHScrollBar->h() : 0;
-  int xoff = 0;
-  int yoff = text_area.y - y();
+  // int hscroll_h = mHScrollBar->visible() ? mHScrollBar->h() : 0;
+  // int xoff = 0;
+  // int yoff = text_area.y - y();
 
 #ifndef LINENUM_LEFT_OF_VSCROLL
   int vscroll_w = mVScrollBar->visible() ? mVScrollBar->w() : 0;
@@ -2941,15 +2940,17 @@ Fl_Text_Display::draw(void)
     return;
   }
 
-  enum Fl::foreground fcolor = Fl_Widget::skin_.normal_fcolor;
-  enum Fl::background bcolor = Fl_Widget::skin_.normal_bcolor;
+  // enum Fl::foreground fcolor = Fl_Widget::skin_.normal_fcolor;
+  // enum Fl::background bcolor = Fl_Widget::skin_.normal_bcolor;
 
   Fl::clip_push(x(), y(), w(), h());
 
+/*
   if ( !active_r() )
   {
     fcolor = Fl_Widget::skin_.disabled_fcolor;
   }
+*/
 
   int scrollsize = scrollbar_width_ ? scrollbar_width_ : Fl::scrollbar_size();
 
@@ -3455,7 +3456,8 @@ Fl_Text_Display::handle(
       }
 
       break;
-
+    default:
+      break;
   }
 
   return 0;

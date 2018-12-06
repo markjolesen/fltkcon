@@ -120,6 +120,8 @@ Fl_Menu_Bar::handle(
         }
 
         return test_shortcut() != 0;
+      default:
+        break;
     }
 
   return 0;

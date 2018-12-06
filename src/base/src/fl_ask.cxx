@@ -103,12 +103,14 @@ static char avoidRecursion = 0;
 // The first argument (Fl_Widget *) can either be an Fl_Button*
 // pointer to one of the buttons or an Fl_Window* pointer to the
 // message window (message_form).
+/*
 static void
 button_cb(Fl_Widget*, long val)
 {
   ret_val = (int) val;
   message_form->hide();
 }
+*/
 
 static Fl_Window*
 makeform()
@@ -339,7 +341,7 @@ innards(const char* fmt,
     message_form->label(message_title_default);
 
   // deactivate Fl::grab(), because it is incompatible with modal windows
-  Fl_Window* g = Fl::grab();
+  /*Fl_Window* g = Fl::grab() */;
 
 //_mjo  if (g) Fl::grab(0);
 

@@ -177,7 +177,7 @@ Fl_Input_Choice::Fl_Input_Choice (
 }
 
 void
-Fl_Input_Choice::resize(int X, int Y, int W, int H)
+Fl_Input_Choice::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
   Fl_Group::resize(X, Y, W, H);
   inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());

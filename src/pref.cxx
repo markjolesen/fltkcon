@@ -1435,19 +1435,24 @@ Fl_Preferences::Node::deleteIndex()
   indexed_ = 0;
 }
 
+#if 0
 static unsigned char
 x2i(char hi, char lo)
 {
   return ((hi - 'A') << 4) | (lo - 'A');
 }
+#endif
 
+#if 0
 static void
 i2x(unsigned char v, char* d)
 {
   d[0] = ((v >> 4) & 0x0f) + 'A';
   d[1] = (v & 0x0f) + 'A';
 }
+#endif
 
+#if 0
 static void*
 a2p(const char* s)
 {
@@ -1466,7 +1471,9 @@ a2p(const char* s)
 
   return v.ret;
 }
+#endif
 
+#if 0
 static void
 p2a(void* vp, char* d)
 {
@@ -1485,3 +1492,4 @@ p2a(void* vp, char* d)
 
   d[2 * i] = 0;
 }
+#endif

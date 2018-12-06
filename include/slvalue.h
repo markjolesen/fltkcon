@@ -75,7 +75,11 @@ class Fl_Value_Slider : public Fl_Slider
   protected:
     void draw();
   public:
-    int handle(int);
+
+    virtual bool
+    handle(
+      enum Fl_Event const event);
+
     Fl_Value_Slider(
       int const i_pos_x,
       int const i_pos_y,

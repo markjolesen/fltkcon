@@ -144,7 +144,12 @@ class Fl_Window : public Fl_Group
 
     virtual bool handle(enum Fl_Event const);
 
-    virtual void resize(int X, int Y, int W, int H);
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
 
     void set_border(int b);
 

@@ -288,7 +288,7 @@ Fl_Window::show()
 }
 
 void
-Fl_Window::resize(int X, int Y, int W, int H)
+Fl_Window::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
   pWindowDriver->resize(X, Y, W, H);
 }
@@ -331,6 +331,8 @@ Fl_Window::handle(enum Fl_Event const ev)
           pWindowDriver->unmap();
         }
 
+        break;
+      default:
         break;
     }
   }

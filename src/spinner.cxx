@@ -238,13 +238,15 @@ Fl_Spinner::handle(
       if (input_.take_focus()) return 1;
 
       return 0;
+    default:
+      break;
   }
 
   return Fl_Group::handle(event);
 }
 
 void
-Fl_Spinner::resize(int X, int Y, int W, int H)
+Fl_Spinner::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
   Fl_Group::resize(X, Y, W, H);
 

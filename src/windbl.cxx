@@ -100,12 +100,12 @@ Fl_Double_Window::show()
 
 
 void
-Fl_Double_Window::resize(int X, int Y, int W, int H)
+Fl_Double_Window::resize(int const X, int const Y, unsigned int const W, unsigned int const H)
 {
-  int ow = w();
-  int oh = h();
+  // int ow = w();
+  // int oh = h();
   Fl_Window::resize(X, Y, W, H);
-  Fl_X* myi = Fl_X::i(this);
+  // Fl_X* myi = Fl_X::i(this);
 }
 
 

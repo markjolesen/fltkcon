@@ -89,7 +89,9 @@ class Fl_Box : public Fl_Widget
       unsigned int const i_len_y,
       unsigned char const* i_label = 0);
 
-    virtual int handle(int);
+    virtual bool
+    handle(
+      enum Fl_Event const event);
 
 };
 

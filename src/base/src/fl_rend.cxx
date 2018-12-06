@@ -298,7 +298,7 @@ fl_draw(
   symtotal = symwidth[0] + symwidth[1];
 
   int strw = 0;
-  int strh;
+  // int strh;
 
   if (str)
   {
@@ -327,7 +327,7 @@ fl_draw(
   }
 
   symtotal = symwidth[0] + symwidth[1];
-  strh = lines;
+  // strh = lines;
 
   // figure out vertical position of the first line:
   int xpos;

@@ -333,7 +333,6 @@ inpcur_del(
   unsigned int l_mod;
   int l_result;
   struct inpbuf* l_buf;
-  size_t l_size;
   size_t l_slot;
 
   l_mod = MOD_NONE;
@@ -354,8 +353,8 @@ inpcur_del(
 
     if (l_buf)
     {
-      l_size = ((*l_buf).m_length + (*io_cur).m_active->m_length);
-      l_result = inpbuf_grow((*io_cur).m_active, (*l_buf).m_length);
+      size_t l_size = ((*l_buf).m_length + (*io_cur).m_active->m_length);
+      l_result = inpbuf_grow((*io_cur).m_active, l_size);
 
       if (l_result)
       {

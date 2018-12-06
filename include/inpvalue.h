@@ -84,7 +84,14 @@ class Fl_Value_Input : public Fl_Valuator
   protected:
     void draw();
   public:
-    void resize(int, int, int, int);
+
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
+
     Fl_Value_Input(
       int const i_pos_x,
       int const i_pos_y,

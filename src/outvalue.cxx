@@ -79,8 +79,9 @@ Fl_Value_Output::draw()
           skin_.normal_fcolor, skin_.normal_bcolor, skin_.normal_fcolor);
 }
 
-int
-Fl_Value_Output::handle(int event)
+bool
+Fl_Value_Output::handle(
+      enum Fl_Event const event)
 {
   if (!step()) return 0;
 

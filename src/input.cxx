@@ -254,6 +254,8 @@ Fl_Input::handle(
     case FL_KEYBOARD:
       l_handled = handle_keyboard();
       break;
+    default:
+      break;
   }
 
   if (false == l_handled)

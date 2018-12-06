@@ -116,7 +116,12 @@ class Fl_Spinner : public Fl_Group
     bool handle(
       enum Fl_Event const event);
 
-    void resize(int X, int Y, int W, int H);
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
 
     const char*
     format() const

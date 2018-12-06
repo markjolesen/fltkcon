@@ -10,10 +10,9 @@
   *
   *-------------------------------------------------------------------------
   */
-#if defined(__WATCOMC__) && (__WATCOMC__ < 1300)
-
 #include <math.h>
 
+#if defined(__WATCOMC__) && (__WATCOMC__ < 1300)
 /*
  * Round to nearest integer, with halfway cases going to the nearest even.
  */

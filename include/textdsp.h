@@ -298,7 +298,13 @@ class Fl_Text_Display: public Fl_Group
     }
 
     virtual void recalc_display();
-    virtual void resize(int X, int Y, int W, int H);
+
+    virtual
+    void resize(
+      int const x,
+      int const y,
+      unsigned int const w,
+      unsigned int const h);
 
     double x_to_col(double x) const;
 

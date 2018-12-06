@@ -78,9 +78,9 @@ Fl_Menu_Button::draw()
 {
   if (type()) return;
 
-  int H = 1;
+  // int H = 1;
   int X = x() + w();
-  int Y = y() + (h() - H) / 2;
+  // int Y = y() + (h() - H) / 2;
 
   draw_label(x(), y(), X - x() + 2, h());
   Fl::draw_putc(x_ + w_, y_, Fl::_skin_sym.down, 1, skin_.normal_fcolor,

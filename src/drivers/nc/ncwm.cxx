@@ -92,7 +92,6 @@ ncwm::handle_push(Fl_Window& window, hit_type const what) const
   int top_orig = top;
   unsigned int width_orig = width;
   unsigned int height_orig = height;
-  int rc;
 
   blk = block_new();
   block_read_frame(blk, left, top, width, height);
