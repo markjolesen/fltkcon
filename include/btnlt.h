@@ -73,10 +73,9 @@
 class Fl_Light_Button : public Fl_Button
 {
 
-#if 0
   protected:
+
     virtual void draw();
-#endif
 
   public:
 

@@ -24,10 +24,9 @@ CXXFLAGS=\
         -pedantic\
         -ggdb
 
-EXES=tmenubar
-
-EXES2=\
+EXES=\
     talign\
+    tbutton\
     tinpfile\
     tinput\
     tmenubar\
@@ -41,6 +40,9 @@ LIBS=-L ../lib $(FLTKLIB) -l curses
 all : $(EXES)
 
 talign : talign.o
+	$(CXX) $(CXXFLAGS) -o $@ $? $(LIBS)
+
+tbutton : tbutton.o
 	$(CXX) $(CXXFLAGS) -o $@ $? $(LIBS)
 
 tinpfile : tinpfile.o
