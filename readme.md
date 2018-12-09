@@ -27,8 +27,10 @@ Domain, which is compatible with GNU LGPL.
 
 fltkcon is a port of the Fast Light Toolkit (FLTK) to terminal consoles.
 
-This work is expiremental. Currently, 32-bit DOS Protected Mode support
-is being developed.
++ 32-bit DOS Protected Mode
++ 32/64-bit Microsoft Windows (NT)
++ 32/64-bit GNU/Linux (ncurses)
++ 32/64-bit BSD variants (ncurses)
 
 # Screen Shots
 
@@ -36,6 +38,44 @@ is being developed.
 
 
 ![menubar](/htmimg/menubar.png)
+
+# Hello World example
+
+```C++
+#include "widget.h"
+#include "win.h"
+#include "btn.h"
+
+static void
+quit_cb(Fl_Widget*, void* userdata)
+{
+  Fl_Window* window = reinterpret_cast<Fl_Window*>(userdata);
+  window->hide();
+  return;
+}
+
+int
+main(int argc, char** argv)
+{
+
+  Fl_Window window(1, 1, 20, 5,
+                   reinterpret_cast<unsigned char const*>("Hello Example"));
+
+  Fl_Button* btn = new Fl_Button(2, 2, 15, 1,
+                                 reinterpret_cast<unsigned char const*>("Hello"));
+
+  btn->when((Fl_Widget::FL_WHEN_CHANGED |
+             Fl_Widget::FL_WHEN_ENTER_KEY_ALWAYS |
+             Fl_Widget::FL_WHEN_RELEASE));
+
+  btn->callback(quit_cb, &window);
+
+  window.end();
+  window.show(argc, argv);
+
+  return Fl::run();
+}
+```
 
 # Links
 
@@ -47,4 +87,5 @@ DOS FLTK port
 
 A cross platform C++ TUI inspired by FLTK
 [FDOSTUI](http://www.nongnu.org/fdostui/)
+
 

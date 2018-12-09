@@ -27,6 +27,7 @@ CXXFLAGS=\
 EXES=\
     talign\
     tbutton\
+    thello\
     tinpfile\
     tinput\
     tmenubar\
@@ -43,6 +44,9 @@ talign : talign.o
 	$(CXX) $(CXXFLAGS) -o $@ $? $(LIBS)
 
 tbutton : tbutton.o
+	$(CXX) $(CXXFLAGS) -o $@ $? $(LIBS)
+
+thello : thello.o
 	$(CXX) $(CXXFLAGS) -o $@ $? $(LIBS)
 
 tinpfile : tinpfile.o
