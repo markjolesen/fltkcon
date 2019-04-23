@@ -515,6 +515,7 @@ menuwindow::~menuwindow()
 {
   hide();
   delete title;
+  free(table);
 }
 
 void
